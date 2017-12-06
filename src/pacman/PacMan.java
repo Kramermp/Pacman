@@ -1,13 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pacman;
 
+import mainmenu.controller.MainMenuCntl;
+
 /**
- *
- * @author Michael Kramer
+ * This class serves as the entry point to the Pacman Application.
+ * 
+ * @author Michael Kramer <kramermp5@gmail.com>
+ * @version .1
  */
 public class PacMan {
 
@@ -15,7 +14,7 @@ public class PacMan {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        new MainMenuCntl();
     }
     
 }
