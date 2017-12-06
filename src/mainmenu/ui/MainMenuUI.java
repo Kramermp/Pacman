@@ -1,5 +1,7 @@
 package mainmenu.ui;
 
+import java.awt.event.ActionEvent;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import mainmenu.controller.MainMenuCntl;
 
@@ -19,5 +21,15 @@ public class MainMenuUI extends JPanel {
      */
     public MainMenuUI(MainMenuCntl parentCntl) {
         this.parentCntl = parentCntl;
+        addComponents();
+    }
+    
+    private void addComponents() {
+        JButton playBtn = new JButton("Play");
+        playBtn.addActionListener((ActionEvent ae) -> { 
+            System.out.println("playBtn click event registered.");
+            parentCntl.startGame();
+        });
+        add(playBtn);
     }
 }

@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mainmenu.controller;
 
+import game.controller.GameCntl;
 import mainmenu.ui.MainMenuUI;
 import userinterface.UserInterface;
 
@@ -25,5 +21,12 @@ public class MainMenuCntl {
         userInterface = UserInterface.getInstance();
         userInterface.setDisplay(childUI);
         userInterface.setVisible(true);
+    }
+    
+    /**
+     * This method is called to initialize a game.
+     */
+    public void startGame() {
+        new GameCntl();
     }
 }
