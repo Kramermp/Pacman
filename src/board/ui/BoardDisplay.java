@@ -25,6 +25,8 @@ import javax.imageio.ImageIO;
 public class BoardDisplay {
     private Board source;
     private static BufferedImage backgroundImage;
+    private static BufferedImage powerupImage;
+    private static BufferedImage pelletImage;
     
     public BoardDisplay(Board board) {
         this.source = board;
@@ -40,14 +42,28 @@ public class BoardDisplay {
         //g.drawImage(backgroundImage, 0, 0, size.width, size.height, null);
         for(int i = 0; i < source.getHeight(); i++) {
             for(int j = 0; j < source.getWidth(); j++) {
-                if(spaceArray[i][j] == 0) {
-                    g.setColor(Color.BLACK);
-                } else if(spaceArray[i][j] == 1) {
-                    //Random rng = new Random();
-                    //g.setColor(new Color(rng.nextInt(255), rng.nextInt(255), rng.nextInt(255)));
-                    g.setColor(Color.BLUE);
+                switch (spaceArray[i][j]) {
+                    case 3: // Has Power Pellet
+                        g.drawImage(powerupImage, j * spaceWidth, i * spaceHeight, spaceWidth, spaceHeight, null);
+                        break;
+                    case 0: // Has regular Pellet
+                        //Random rng = new Random();
+                        //g.setColor(new Color(rng.nextInt(255), rng.nextInt(255), rng.nextInt(255)));
+                        g.drawImage(pelletImage, j * spaceWidth, i * spaceHeight, spaceWidth, spaceHeight, null);
+                        break;
+                    case 1: // Has Wall
+                        g.setColor(Color.BLUE);
+                        g.fillRect(j * spaceWidth, i * spaceHeight, spaceWidth, spaceHeight);
+                        break;
+                    case 2: //
+                        g.setColor(Color.RED);
+                        g.fillRect(j * spaceWidth, i * spaceHeight, spaceWidth, spaceHeight);
+                        break;
+
+                    default:
+
+                        break;
                 }
-                g.fillRect(j * spaceWidth, i * spaceHeight, spaceWidth, spaceHeight);
             }
         }
     }
@@ -55,6 +71,8 @@ public class BoardDisplay {
     private void loadImage() {
         try {
             backgroundImage = ImageIO.read(new File("background.png"));
+            powerupImage = ImageIO.read(new File("powerup.png"));
+            pelletImage = ImageIO.read(new File("pellet.png"));
         } catch (IOException ex) {
             Logger.getLogger(BoardDisplay.class.getName()).log(Level.SEVERE, null, ex);
         }
