@@ -1,6 +1,6 @@
 package entity.model;
 
-import com.sun.javafx.scene.traversal.Direction;
+import game.model.Game;
 
 /**
  * This abstract class is the class the different entities will extend. Where
@@ -10,12 +10,15 @@ import com.sun.javafx.scene.traversal.Direction;
  * @version .1
  */
 public abstract class Entity {
+    private double frameCounter = 2;
     private Direction direction = Direction.DOWN;
-    private int xPos = 0;
-    private int yPos = 0;
-    private int speed = 1;
+    private double xPos = 0;
+    private double yPos = 0;
+    private double speed = .25;
+    private Game parentGame;
     
-    public Entity(int xPos, int yPos) {
+    public Entity(Game parentGame, double xPos, double yPos) {
+        this.parentGame = parentGame;
         this.xPos = xPos;
         this.yPos = yPos;
     }
@@ -24,31 +27,44 @@ public abstract class Entity {
         switch (direction) {
             case UP:
                 yPos-=speed;
+                xPos = (int) xPos;
                 break;
             case DOWN:
                 yPos+=speed;
+                xPos = (int) xPos;
                 break;
             case LEFT:
                 xPos-=speed;
+                yPos = (int) yPos;
                 break;
             case RIGHT:
                 xPos+=speed;
+                yPos = (int) yPos;
                 break;
         }
+        frameCounter = 1;
+    }
+    
+    public void incrementFrame() {
+        
+    }
+    
+    public double getFrameCounter() { 
+        return this.frameCounter;
     }
     
     public Direction getDirection() {
         return this.direction;
     }
     
-    public int getXPos() {
+    public double getXPos() {
         return this.xPos;
     }
     
-    public int getYPos() {
+    public double getYPos() {
         return this.yPos;
     }
-    public int getSpeed() {
+    public double getSpeed() {
         return this.speed;
     }
     

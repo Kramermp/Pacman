@@ -20,7 +20,7 @@ import javax.swing.Timer;
 public class GameUI extends JPanel {
     private GameCntl parentCntl;
     // This timer will be what drives the FPS
-    private Timer timer  = new Timer(250, (ActionEvent ae) -> {
+    private Timer timer  = new Timer(100, (ActionEvent ae) -> {
         //System.out.println("Display Timer Tick");
         this.drawBoard();
     });
@@ -39,6 +39,7 @@ public class GameUI extends JPanel {
         this.parentCntl = parentCntl;
         this.pacmanDisplay = pacmanDisplay;
         this.boardDisplay = boardDisplay;
+        this.setDoubleBuffered(true);
         this.timer.start();
         this.configureDisplays();
         this.addKeyListener(new ControlListener());
@@ -55,11 +56,9 @@ public class GameUI extends JPanel {
     
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
         //System.out.println("Painting Component");
         boardDisplay.drawBoard(g, getSize());
         pacmanDisplay.drawEntity(g, this);
-        this.updateUI();
         //UserInterface.getInstance().repaint();
     }
     

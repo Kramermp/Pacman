@@ -1,6 +1,7 @@
 package game.model;
 
 import board.model.Board;
+import entity.model.Direction;
 import entity.model.PacMan;
 import javax.swing.Timer;
 
@@ -13,12 +14,12 @@ import javax.swing.Timer;
 public class Game {
     private PacMan pacman;
     private Board board;
-    private Timer timer = new Timer(250, (ActionEvent) -> { 
+    private Timer timer = new Timer(40, (ActionEvent) -> { 
         updateEntities();
     });
     
     public Game () {
-        this.pacman = new PacMan(1, 1);
+        this.pacman = new PacMan(this, 1, 1);
         //this.pacman.setSpeed(10);
         this.board = new Board();
         timer.start();
@@ -46,6 +47,7 @@ public class Game {
         } else {
             // Skip Pacman Move
             // Do Nothing
+            pacman.setDirection(Direction.NONE);
         }
         
     }
@@ -54,22 +56,24 @@ public class Game {
         int[][] spaceArray = board.getSpaceArray();
         switch(pacman.getDirection()) {
             case UP:
-                if (spaceArray[pacman.getYPos() - 1][pacman.getXPos()] != 1) {
+                //This needs to be handled different because (int) naturally floors
+                if (spaceArray[ (int)Math.ceil(pacman.getYPos() - 1)][(int)pacman.getXPos()] != 1) {
                     return true;
                 }
                 break;
             case DOWN:
-                if(spaceArray[pacman.getYPos() + 1][pacman.getXPos()] != 1) {
+                if(spaceArray[(int)pacman.getYPos() + 1][(int)pacman.getXPos()] != 1) {
                     return true;
                 }
                 break;
             case LEFT:
-                if (spaceArray[pacman.getYPos()][pacman.getXPos() - 1] != 1) {
+                //This needs to be handled different because (int) naturally floors
+                if (spaceArray[(int)pacman.getYPos()][(int)Math.ceil(pacman.getXPos() - 1)] != 1) { 
                     return true;
                 }
                 break;
             case RIGHT:
-                if (spaceArray[pacman.getYPos()][pacman.getXPos() + 1] != 1) {
+                if (spaceArray[(int)pacman.getYPos()][(int)pacman.getXPos() + 1] != 1) {
                     return true;
                 }
                 break;

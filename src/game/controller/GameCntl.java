@@ -1,6 +1,6 @@
 package game.controller;
 
-import com.sun.javafx.scene.traversal.Direction;
+import entity.model.Direction;
 import game.model.Game;
 import game.ui.GameUI;
 import game.ui.GameUIFactory;
@@ -25,7 +25,9 @@ public class GameCntl extends Controller {
         initializeGame();
         GameUI childUI = new GameUIFactory(game).getGameUI(this);
         UserInterface.getInstance().setDisplay(childUI);
+
         UserInterface.getInstance().setCurrentController(this);
+        childUI.repaint();
         childUI.requestFocus(); 
     }
     

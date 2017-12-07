@@ -20,7 +20,8 @@ public class PacManDisplay implements Drawable {
     private GameUI parentDisplay;
     private PacMan source;
     private ImageObserver observer;
-    private BufferedImage image;
+    private BufferedImage openMouthImage;
+    private BufferedImage closedMouthImage;
     
     public PacManDisplay (PacMan pacman) {
         this.source = pacman;
@@ -37,13 +38,22 @@ public class PacManDisplay implements Drawable {
         int pacmanWidth = spaceWidth - 10;
         
         
-        int realXPos = source.getXPos() * spaceWidth ;
-        int realYPos = source.getYPos() * spaceHeight ;
+        int realXPos = (int) (source.getXPos() * spaceWidth + 5);
+        int realYPos = (int) (source.getYPos() * spaceHeight) + 5; 
         
-        g.drawImage(image, realXPos, realYPos, pacmanWidth, pacmanHeight, observer);
+        g.drawImage(getCurrentImage(), realXPos, realYPos, pacmanWidth, pacmanHeight, observer);
         
+        source.incrementFrame();
     }
-
+    
+    public BufferedImage getCurrentImage() {
+        if(System.currentTimeMillis() % 2 == 0) {
+            return openMouthImage;
+        } else {
+            return closedMouthImage;
+        }
+    }
+    
     @Override
     public void setImageObserver(ImageObserver io) {
         this.observer = io;
@@ -51,7 +61,8 @@ public class PacManDisplay implements Drawable {
     
     private void loadImage() {
         try {
-            image = ImageIO.read(new File("pacman.png"));
+            openMouthImage = ImageIO.read(new File("pacman-openmouth.png"));
+            closedMouthImage = ImageIO.read(new File("pacman-closedmouth.png"));
         } catch (IOException ex) {
             System.err.println("IOException reading PacMan Image");
         }
