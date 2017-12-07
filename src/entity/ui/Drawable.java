@@ -1,5 +1,6 @@
 package entity.ui;
 
+import game.ui.GameUI;
 import java.awt.Graphics;
 import java.awt.image.ImageObserver;
 
@@ -10,6 +11,6 @@ import java.awt.image.ImageObserver;
  */
 public interface Drawable {
     
-    public void drawEntity(Graphics g);
+    public void drawEntity(Graphics g, GameUI parentDisplay);
     public void setImageObserver(ImageObserver io);
 }

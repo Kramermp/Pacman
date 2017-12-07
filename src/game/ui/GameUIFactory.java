@@ -1,5 +1,6 @@
 package game.ui;
 
+import board.ui.BoardDisplay;
 import entity.ui.PacManDisplay;
 import game.controller.GameCntl;
 import game.model.Game;
@@ -25,7 +26,8 @@ public class GameUIFactory {
      */
     public GameUI getGameUI(GameCntl gameCntl) {
         PacManDisplay pacmanDisplay = new PacManDisplay(sourceGame.getPacMan());
+        BoardDisplay boardDisplay = new BoardDisplay(sourceGame.getBoard());
         
-        return new GameUI(gameCntl, pacmanDisplay);
+        return new GameUI(gameCntl, pacmanDisplay, boardDisplay);
     }
 }

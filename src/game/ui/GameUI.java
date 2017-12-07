@@ -1,5 +1,6 @@
 package game.ui;
 
+import board.ui.BoardDisplay;
 import entity.ui.PacManDisplay;
 import game.controller.GameCntl;
 import java.awt.Color;
@@ -25,6 +26,7 @@ public class GameUI extends JPanel {
     });
     
     private PacManDisplay pacmanDisplay;
+    private BoardDisplay boardDisplay;
     
     /**
      * This is the default constructor for GameUI
@@ -32,9 +34,11 @@ public class GameUI extends JPanel {
      * @param parentCntl the GameCntrl to manage this UI
      * @param pacmanDisplay the PacManDisplay object
      */
-    public GameUI(GameCntl parentCntl, PacManDisplay pacmanDisplay) {
+    public GameUI(GameCntl parentCntl, PacManDisplay pacmanDisplay, 
+            BoardDisplay boardDisplay) {
         this.parentCntl = parentCntl;
         this.pacmanDisplay = pacmanDisplay;
+        this.boardDisplay = boardDisplay;
         this.timer.start();
         this.configureDisplays();
         this.addKeyListener(new ControlListener());
@@ -53,7 +57,8 @@ public class GameUI extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         //System.out.println("Painting Component");
-        pacmanDisplay.drawEntity(g);
+        boardDisplay.drawBoard(g, getSize());
+        pacmanDisplay.drawEntity(g, this);
         this.updateUI();
         //UserInterface.getInstance().repaint();
     }

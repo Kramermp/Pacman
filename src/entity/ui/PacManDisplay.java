@@ -1,6 +1,8 @@
 package entity.ui;
 
+import board.model.Board;
 import entity.model.PacMan;
+import game.ui.GameUI;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -15,6 +17,7 @@ import javax.imageio.ImageIO;
  * @version .1
  */
 public class PacManDisplay implements Drawable {
+    private GameUI parentDisplay;
     private PacMan source;
     private ImageObserver observer;
     private BufferedImage image;
@@ -25,9 +28,19 @@ public class PacManDisplay implements Drawable {
     }
 
     @Override
-    public void drawEntity(Graphics g) {
+    public void drawEntity(Graphics g, GameUI parentDisplay) {
         //System.out.println("Drawing PacManEntity");
-        g.drawImage(image, source.getXPos(), source.getYPos(), observer);
+        int spaceHeight = parentDisplay.getSize().height / Board.getHeight();
+        int spaceWidth = parentDisplay.getSize().width / Board.getWidth();
+        
+        int pacmanHeight = spaceHeight - 10;
+        int pacmanWidth = spaceWidth - 10;
+        
+        
+        int realXPos = source.getXPos() * spaceWidth ;
+        int realYPos = source.getYPos() * spaceHeight ;
+        
+        g.drawImage(image, realXPos, realYPos, pacmanWidth, pacmanHeight, observer);
         
     }
 
