@@ -50,27 +50,24 @@ public class Game {
         switch(pacman.getDirection()) {
             case UP:
                 //This needs to be handled different because (int) naturally floors
-                if (spaceArray[ (int)Math.ceil(pacman.getYPos() - 1)][(int)pacman.getXPos()] != 1
-                        || spaceArray[ (int)Math.ceil(pacman.getYPos() - 1)][(int)pacman.getXPos()] != 2) {
+                if (spaceArray[ (int)Math.ceil(pacman.getYPos() - 1)][(int)pacman.getXPos()] != 1) {
                     return true;
                 }
                 break;
             case DOWN:
-                if(spaceArray[(int)pacman.getYPos() + 1][(int)pacman.getXPos()] != 1 
-                        || spaceArray[ (int)Math.ceil(pacman.getYPos() - 1)][(int)pacman.getXPos()] != 2) {
+                if(spaceArray[(int)pacman.getYPos() + 1][(int)pacman.getXPos()] != 1
+                        && spaceArray[(int)pacman.getYPos() + 1][(int)pacman.getXPos()] != 2) {
                     return true;
                 }
                 break;
             case LEFT:
                 //This needs to be handled different because (int) naturally floors
-                if (spaceArray[(int)pacman.getYPos()][(int)Math.ceil(pacman.getXPos() - 1)] != 1 
-                        || spaceArray[ (int)Math.ceil(pacman.getYPos() - 1)][(int)pacman.getXPos()] != 2) { 
+                if (spaceArray[(int)pacman.getYPos()][(int)Math.ceil(pacman.getXPos() - 1)] != 1) { 
                     return true;
                 }
                 break;
             case RIGHT:
-                if (spaceArray[(int)pacman.getYPos()][(int)pacman.getXPos() + 1] != 1 
-                        || spaceArray[ (int)Math.ceil(pacman.getYPos() - 1)][(int)pacman.getXPos()] != 2) {
+                if (spaceArray[(int)pacman.getYPos()][(int)pacman.getXPos() + 1] != 1) {
                     return true;
                 }
                 break;
