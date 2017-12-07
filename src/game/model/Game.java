@@ -67,7 +67,7 @@ public class Game {
         } else {
             // Skip Pacman Move
             // Do Nothing
-            pacman.setDirection(Direction.NONE);
+            //pacman.setDirection(Direction.NONE);
             pacman.setState(Entity.MovementState.STOPPED);
         }
         

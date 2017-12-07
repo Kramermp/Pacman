@@ -22,8 +22,14 @@ public class PacManDisplay implements Drawable {
     private GameUI parentDisplay;
     private PacMan source;
     private ImageObserver observer;
-    private BufferedImage openMouthImage;
-    private BufferedImage closedMouthImage;
+    private BufferedImage openMouthImageUp;
+    private BufferedImage openMouthImageDown;
+    private BufferedImage openMouthImageLeft;
+    private BufferedImage openMouthImageRight;
+    private BufferedImage closedMouthImageUp;
+    private BufferedImage closedMouthImageDown;
+    private BufferedImage closedMouthImageLeft;
+    private BufferedImage closedMouthImageRight;
     private BufferedImage pacmanNoMouthImage;
     private BufferedImage currentImage;
     
@@ -51,14 +57,42 @@ public class PacManDisplay implements Drawable {
     
     public BufferedImage getCurrentImage() {
         if(source.getState() == Entity.MovementState.SPAWNED) {
-            return currentImage;
+            return pacmanNoMouthImage;
         }
         if(System.currentTimeMillis() % 2 == 0) {
-            currentImage = openMouthImage;
-            return openMouthImage;
+            return getClosedMouthImage();
         } else {
-            currentImage = openMouthImage;
-            return closedMouthImage;
+            return getOpenMouthImage();
+        }
+    }
+    
+    private BufferedImage getClosedMouthImage() {
+        switch(source.getDirection()) { 
+            case UP:
+                return closedMouthImageUp;
+            case DOWN:
+                return closedMouthImageDown;
+            case LEFT:
+                return closedMouthImageLeft;
+            case RIGHT:
+                return closedMouthImageRight;
+            default:
+                return closedMouthImageDown;
+        }
+    }
+    
+    private BufferedImage getOpenMouthImage() {
+        switch(source.getDirection()) {
+            case UP:
+                return openMouthImageUp;
+            case DOWN:
+                return openMouthImageDown;
+            case LEFT:
+                return openMouthImageLeft;
+            case RIGHT:
+                return openMouthImageRight;
+            default:
+                return openMouthImageDown;
         }
     }
     
@@ -69,8 +103,14 @@ public class PacManDisplay implements Drawable {
     
     private void loadImage() {
         try {
-            openMouthImage = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-openmouth.png"));
-            closedMouthImage = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-closedmouth.png"));
+            openMouthImageUp = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-openmouthup.png"));
+            openMouthImageDown = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-openmouthdown.png"));
+            openMouthImageLeft = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-openmouthleft.png"));
+            openMouthImageRight = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-openmouthright.png"));
+            closedMouthImageUp = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-closedmouthup.png"));
+            closedMouthImageDown = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-closedmouthdown.png"));
+            closedMouthImageLeft = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-closedmouthleft.png"));
+            closedMouthImageRight = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-closedmouthright.png"));
             pacmanNoMouthImage = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-nomouth.png"));
         } catch (IOException ex) {
             System.err.println("IOException reading PacMan Image");
