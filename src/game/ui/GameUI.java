@@ -40,6 +40,7 @@ public class GameUI extends JPanel {
         this.pacmanDisplay = pacmanDisplay;
         this.boardDisplay = boardDisplay;
         this.setDoubleBuffered(true);
+        this.setBackground(Color.BLACK);
         this.timer.start();
         this.configureDisplays();
         this.addKeyListener(new ControlListener());
@@ -57,6 +58,7 @@ public class GameUI extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         //System.out.println("Painting Component");
+        super.paintComponent(g);
         boardDisplay.drawBoard(g, getSize());
         pacmanDisplay.drawEntity(g, this);
         //UserInterface.getInstance().repaint();

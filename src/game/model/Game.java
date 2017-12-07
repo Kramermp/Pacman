@@ -12,6 +12,7 @@ import javax.swing.Timer;
  * @version .1
  */
 public class Game {
+    private int score = 0;
     private PacMan pacman;
     private Board board;
     private Timer timer = new Timer(40, (ActionEvent) -> { 
@@ -44,12 +45,12 @@ public class Game {
     private void updateEntities() {
         if (validPacManMove()) {
             pacman.move();
+            checkSpace();
         } else {
             // Skip Pacman Move
             // Do Nothing
             pacman.setDirection(Direction.NONE);
         }
-        
     }
 
     private boolean validPacManMove() {
@@ -79,5 +80,26 @@ public class Game {
                 break;
         }
         return false;
+    }
+    
+    private void checkSpace() {
+        int[][] spaceArray = board.getSpaceArray();
+        if(spaceArray[(int)pacman.getYPos()][(int)pacman.getXPos()] == 0) {
+            spaceArray[(int)pacman.getYPos()][(int)pacman.getXPos()] = 4;
+            pelletEaten();
+        } else if (spaceArray[(int)pacman.getYPos()][(int)pacman.getXPos()] == 3) {
+            spaceArray[(int)pacman.getYPos()][(int)pacman.getXPos()] = 4;
+            powerPelletEaten();
+        }
+        
+    }
+    
+    private void pelletEaten() {
+        score+=10;
+    }
+    
+    private void powerPelletEaten() {
+        score+=20;
+        //Do Stuff
     }
 }
