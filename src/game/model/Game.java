@@ -16,10 +16,13 @@ import javax.swing.Timer;
  * @version .1
  */
 public class Game {
+    public static enum GameState {PLAYING, WAITING, OVER};
+    private GameState state = GameState.WAITING;
     private static final Point pacmanSpawn = new Point (9, 7);
     private static final Point enemySpawn = new Point (9, 5);
     private GameCntl parentCntl;
     private int score = 0;
+    private int level = 0;
     private PacMan pacman;
     private Enemy[] enemies;
     private Board board;
@@ -30,6 +33,7 @@ public class Game {
     
     public Game (GameCntl parentCntl, int level) {
         this.parentCntl = parentCntl;
+        this.level = level;
         this.pacman = new PacMan(this, pacmanSpawn.x, pacmanSpawn.y);
         this.enemies = new Enemy[] {new Enemy(this, enemySpawn.x, enemySpawn.y, level),
                 new Enemy(this, enemySpawn.x, enemySpawn.y, level),
@@ -39,7 +43,12 @@ public class Game {
         
         //this.pacman.setSpeed(10);
         this.board = new Board();
-        timer.start();
+        this.startLevel();
+    }
+    
+    private void startLevel() {
+        System.out.println("Starting Level " + level);
+        this.setState(GameState.WAITING);
     }
     
     public PacMan getPacMan() {
@@ -144,14 +153,10 @@ public class Game {
         score+=10;
         board.pelletEaten();
         if(board.boardIsCleared()) {
-            System.out.println("Board Cleared");
+            levelCleared();
         } else {
             // Do Nothing
         }
-    }
-    
-    private void checkBoardClear() {
-        
     }
     
     private void powerPelletEaten() {
@@ -179,4 +184,38 @@ public class Game {
             }
         } while (!validEnemyMove(enemyToMove));
     }
+
+    private void levelCleared() {
+       pacman.returnToSpawn();
+       for(int i = 0; i < enemies.length; i++) {
+           enemies[i].returnToSpawn();
+       }
+       board.reset();
+       level++;
+       startLevel();
+    }
+    
+    public void setState(GameState state) {
+        this.state = state;
+        switch(state) {
+            case PLAYING:
+                timer.restart();
+                break;
+            case WAITING:
+                timer.stop();
+                break;
+            case OVER:
+                
+                break;      
+        }
+    }
+    
+    public GameState getState() {
+        return this.state;
+    }
+    
+    public int getLevel() {
+        return level;
+    }
+        
 }

@@ -27,7 +27,6 @@ public class GameCntl extends Controller {
         initializeGame();
         GameUI childUI = new GameUIFactory(game).getGameUI(this);
         UserInterface.getInstance().setDisplay(childUI);
-
         UserInterface.getInstance().setCurrentController(this);
         childUI.repaint();
         childUI.requestFocus(); 
@@ -37,13 +36,8 @@ public class GameCntl extends Controller {
         game = new Game(this, level);
     }
     
-    public void boardCleared(int levelScore) {
-        System.out.println("Board Cleared");
-        totalScore+=levelScore;
-        game = new Game(this, level);
-        GameUI childUI = new GameUIFactory(game).getGameUI(this);
-        UserInterface.getInstance().setDisplay(childUI);
-        childUI.requestFocus();
+    public void resetBoard() {
+        
     }
     
     @Override
@@ -63,5 +57,14 @@ public class GameCntl extends Controller {
                 game.getPacMan().setDirection(Direction.RIGHT);
                 break;
         }
+        game.setState(Game.GameState.PLAYING);
+    }
+
+    public Game.GameState getGameState() {
+        return game.getState();
+    }
+
+    public int getLevel() {
+        return game.getLevel();
     }
 }

@@ -23,7 +23,7 @@ import javax.imageio.ImageIO;
  * @version .1
  */
 public class BoardDisplay {
-    private Board source;
+    private final Board source;
     private static BufferedImage backgroundImage;
     private static BufferedImage powerupImage;
     private static BufferedImage pelletImage;

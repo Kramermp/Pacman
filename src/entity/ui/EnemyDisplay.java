@@ -62,8 +62,6 @@ public class EnemyDisplay implements Drawable {
         int realYPos = (int) (source.getYPos() * spaceHeight) + 5; 
         
         g.drawImage(getCurrentImage(), realXPos, realYPos, enemyWidth, enemyHeight, parentDisplay);
-        
-        source.incrementFrame();
     }
 
     @Override

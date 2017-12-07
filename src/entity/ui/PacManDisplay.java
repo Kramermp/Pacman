@@ -42,8 +42,6 @@ public class PacManDisplay implements Drawable {
         int realYPos = (int) (source.getYPos() * spaceHeight) + 5; 
         
         g.drawImage(getCurrentImage(), realXPos, realYPos, pacmanWidth, pacmanHeight, observer);
-        
-        source.incrementFrame();
     }
     
     public BufferedImage getCurrentImage() {

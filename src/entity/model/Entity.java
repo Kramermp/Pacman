@@ -10,8 +10,10 @@ import game.model.Game;
  * @version .1
  */
 public abstract class Entity {
-    private double frameCounter = 2;
+    private static final Direction START_DIRECTION = Direction.DOWN;
     private Direction direction = Direction.DOWN;
+    private double spawnX = 0.00;
+    private double spawnY = 0.00;
     private double xPos = 0;
     private double yPos = 0;
     private double speed = .25;
@@ -21,6 +23,8 @@ public abstract class Entity {
         this.parentGame = parentGame;
         this.xPos = xPos;
         this.yPos = yPos;
+        this.spawnX = xPos;
+        this.spawnY = yPos;
     }
     
     public void move() {
@@ -42,15 +46,12 @@ public abstract class Entity {
                 yPos = (int) yPos;
                 break;
         }
-        frameCounter = 1;
     }
     
-    public void incrementFrame() {
-        
-    }
-    
-    public double getFrameCounter() { 
-        return this.frameCounter;
+    public void returnToSpawn() {
+        this.xPos = spawnX;
+        this.yPos = spawnY;
+        this.direction = START_DIRECTION;
     }
     
     public Direction getDirection() {
