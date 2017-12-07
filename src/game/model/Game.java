@@ -16,7 +16,9 @@ import javax.swing.Timer;
 public class Game {
     private int score = 0;
     private PacMan pacman;
-    private Enemy enemy;
+    private Enemy enemy1;
+    private Enemy enemy2;
+    private Enemy enemy3;
     private Board board;
     private Timer timer = new Timer(40, (ActionEvent) -> { 
         updateEntities();
@@ -24,7 +26,9 @@ public class Game {
     
     public Game () {
         this.pacman = new PacMan(this, 1, 1);
-        this.enemy = new Enemy(this, 1, 1);
+        this.enemy1 = new Enemy(this, 1, 1);
+        this.enemy2 = new Enemy(this, 1, 2);
+        this.enemy3 = new Enemy(this, 1, 3);
         
         //this.pacman.setSpeed(10);
         this.board = new Board();
@@ -49,10 +53,23 @@ public class Game {
             pacman.setDirection(Direction.NONE);
         }
         
-        if(validEnemyMove()) {
-            enemy.move();
+        if(validEnemyMove(enemy1)) {
+            enemy1.move();
         } else {
-            calculateEnemyDirection();
+            calculateEnemyDirection(enemy1);
+        }
+        
+        if(validEnemyMove(enemy2)) {
+            enemy2.move();
+        } else {
+            calculateEnemyDirection(enemy2);
+        }
+        
+        if(validEnemyMove(enemy3)) {
+            enemy3.move();
+        } else {
+            System.out.println("Not Valid Move for enemy3");
+            calculateEnemyDirection(enemy3);
         }
     }
 
@@ -86,29 +103,29 @@ public class Game {
         return false;
     }
     
-    private boolean validEnemyMove() {
+    private boolean validEnemyMove(Enemy enemyToMove) {
         int[][] spaceArray = board.getSpaceArray();
-        switch(enemy.getDirection()) {
+        switch(enemyToMove.getDirection()) {
             case UP:
                 //This needs to be handled different because (int) naturally floors
-                if (spaceArray[ (int)Math.ceil(enemy.getYPos() - 1)][(int)enemy.getXPos()] != 1) {
+                if (spaceArray[ (int)Math.ceil(enemyToMove.getYPos() - 1)][(int)enemyToMove.getXPos()] != 1) {
                     return true;
                 }
                 break;
             case DOWN:
-                if(spaceArray[(int)enemy.getYPos() + 1][(int)enemy.getXPos()] != 1
-                        && spaceArray[(int)enemy.getYPos() + 1][(int)enemy.getXPos()] != 2) {
+                if(spaceArray[(int)enemyToMove.getYPos() + 1][(int)enemyToMove.getXPos()] != 1
+                        && spaceArray[(int)enemyToMove.getYPos() + 1][(int)enemyToMove.getXPos()] != 2) {
                     return true;
                 }
                 break;
             case LEFT:
                 //This needs to be handled different because (int) naturally floors
-                if (spaceArray[(int)enemy.getYPos()][(int)Math.ceil(enemy.getXPos() - 1)] != 1) { 
+                if (spaceArray[(int)enemyToMove.getYPos()][(int)Math.ceil(enemyToMove.getXPos() - 1)] != 1) { 
                     return true;
                 }
                 break;
             case RIGHT:
-                if (spaceArray[(int)enemy.getYPos()][(int)enemy.getXPos() + 1] != 1) {
+                if (spaceArray[(int)enemyToMove.getYPos()][(int)enemyToMove.getXPos() + 1] != 1) {
                     return true;
                 }
                 break;
@@ -125,7 +142,6 @@ public class Game {
             spaceArray[(int)pacman.getYPos()][(int)pacman.getXPos()] = 4;
             powerPelletEaten();
         }
-        
     }
     
     private void pelletEaten() {
@@ -138,21 +154,29 @@ public class Game {
     }
     
     public Enemy getEnemy1() {
-        return enemy;
+        return enemy1;
+    }
+    
+    public Enemy getEnemy2() {
+        return enemy2;
+    }
+    
+    public Enemy getEnemy3() {
+        return enemy3;
     }
 
-    private void calculateEnemyDirection() {
+    private void calculateEnemyDirection(Enemy enemyToMove) {
         do {
             int number = new Random().nextInt(4);
             if(number == 0) {
-                enemy.setDirection(Direction.UP);
+                enemyToMove.setDirection(Direction.UP);
             } else if (number == 1) {
-                enemy.setDirection(Direction.DOWN);
+                enemyToMove.setDirection(Direction.DOWN);
             } else if (number == 2) {
-                enemy.setDirection(Direction.LEFT);
+                enemyToMove.setDirection(Direction.LEFT);
             } else {
-                enemy.setDirection(Direction.RIGHT);
+                enemyToMove.setDirection(Direction.RIGHT);
             }
-        } while (!validEnemyMove());
+        } while (!validEnemyMove(enemyToMove));
     }
 }

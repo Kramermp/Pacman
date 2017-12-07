@@ -21,27 +21,29 @@ import javax.swing.Timer;
 public class GameUI extends JPanel {
     private GameCntl parentCntl;
     // This timer will be what drives the FPS
-    private Timer timer  = new Timer(100, (ActionEvent ae) -> {
+    private Timer timer  = new Timer(33, (ActionEvent ae) -> {
         //System.out.println("Display Timer Tick");
-        this.drawBoard();
+        this.updateUI();
     });
     
     private PacManDisplay pacmanDisplay;
     private BoardDisplay boardDisplay;
-    private EnemyDisplay enemyDisplay;
+    private EnemyDisplay[] enemyDisplays;
     
     /**
      * This is the default constructor for GameUI
      * 
      * @param parentCntl the GameCntrl to manage this UI
      * @param pacmanDisplay the PacManDisplay object
+     * @param boardDisplay
+     * @param enemyDisplays
      */
     public GameUI(GameCntl parentCntl, PacManDisplay pacmanDisplay, 
-            BoardDisplay boardDisplay, EnemyDisplay enemyDisplay) {
+            BoardDisplay boardDisplay, EnemyDisplay[] enemyDisplays) {
         this.parentCntl = parentCntl;
         this.pacmanDisplay = pacmanDisplay;
         this.boardDisplay = boardDisplay;
-        this.enemyDisplay = enemyDisplay;
+        this.enemyDisplays = enemyDisplays;
         this.setDoubleBuffered(true);
         this.setBackground(Color.BLACK);
         this.timer.start();
@@ -62,10 +64,13 @@ public class GameUI extends JPanel {
     protected void paintComponent(Graphics g) {
         //System.out.println("Painting Component");
         super.paintComponent(g);
+        //g.clearRect(0, 0, getSize().width, getSize().height);
+        
         boardDisplay.drawBoard(g, getSize());
         pacmanDisplay.drawEntity(g, this);
-        enemyDisplay.drawEntity(g, this);
-        //UserInterface.getInstance().repaint();
+        for(int i = 0; i < enemyDisplays.length; i++) {
+            enemyDisplays[i].drawEntity(g, this);
+        }
     }
     
     private void configureDisplays() {

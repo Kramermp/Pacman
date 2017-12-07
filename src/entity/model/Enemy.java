@@ -12,9 +12,18 @@ import game.model.Game;
  * @author Michael Kramer
  */
 public class Enemy extends Entity {
+    private static int currentEnemyNumber = 1;
+    private int enemyNumber = 1;
     
     public Enemy(Game parentGame, double xPos, double yPos) {
         super(parentGame, xPos, yPos);
+        super.setSpeed(.125);
+        this.enemyNumber = currentEnemyNumber;
+        currentEnemyNumber++;
+    }
+    
+    public int getEnemyNumber() {
+        return this.enemyNumber;
     }
     
 }

@@ -22,29 +22,32 @@ import javax.imageio.ImageIO;
  *
  * @author Michael Kramer
  */
-public class EnemyDisplay implements Drawable {
-    private BufferedImage enemyImageDown;
+public class EnemyDisplay implements Drawable {   
+    private int enemyNumber = 0;
+    private BufferedImage enemy1ImageDown;
+    private BufferedImage enemy2ImageDown;
+    private BufferedImage enemy3ImageDown;
     private Enemy source;
     
     public EnemyDisplay(Enemy source) {
         this.source = source;
+        this.enemyNumber = this.source.getEnemyNumber();
         loadImages();
     }
 
     @Override
     public void drawEntity(Graphics g, GameUI parentDisplay) {
-        System.out.println("Drawing EnemeyEntity");
+        //System.out.println("Drawing EnemeyEntity");
         int spaceHeight = parentDisplay.getSize().height / Board.getHeight();
         int spaceWidth = parentDisplay.getSize().width / Board.getWidth();
         
-        int pacmanHeight = spaceHeight - 10;
-        int pacmanWidth = spaceWidth - 10;
-        
+        int enemyHeight = spaceHeight - 10;
+        int enemyWidth = spaceWidth - 10;
         
         int realXPos = (int) (source.getXPos() * spaceWidth + 5);
         int realYPos = (int) (source.getYPos() * spaceHeight) + 5; 
         
-        g.drawImage(getCurrentImage(), realXPos, realYPos, pacmanWidth, pacmanHeight, parentDisplay);
+        g.drawImage(getCurrentImage(), realXPos, realYPos, enemyWidth, enemyHeight, parentDisplay);
         
         source.incrementFrame();
     }
@@ -56,14 +59,27 @@ public class EnemyDisplay implements Drawable {
 
     private void loadImages() {
         try {
-            enemyImageDown = ImageIO.read(new File("enemy.png"));
+            enemy1ImageDown = ImageIO.read(new File("enemy1.png"));
+            enemy2ImageDown = ImageIO.read(new File("enemy2.png"));
+            enemy3ImageDown = ImageIO.read(new File("enemy3.png"));
         } catch (IOException ex) {
             Logger.getLogger(EnemyDisplay.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private Image getCurrentImage() {
-        //Should Do Stuff
-        return enemyImageDown;
+        switch(this.enemyNumber) {
+            case 1:
+                
+                return enemy1ImageDown;
+            case 2:
+                
+                return enemy2ImageDown;
+            case 3:
+                
+                return enemy3ImageDown;
+            default:
+                return enemy1ImageDown;
+        }
     }
 }
