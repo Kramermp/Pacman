@@ -50,7 +50,7 @@ public class PacManDisplay implements Drawable {
     }
     
     public BufferedImage getCurrentImage() {
-        if(source.getState() == Entity.MovementState.STOPPED) {
+        if(source.getState() == Entity.MovementState.SPAWNED) {
             return currentImage;
         }
         if(System.currentTimeMillis() % 2 == 0) {
@@ -69,8 +69,8 @@ public class PacManDisplay implements Drawable {
     
     private void loadImage() {
         try {
-            openMouthImage = ImageIO.read(new File("pacman-openmouth.png"));
-            closedMouthImage = ImageIO.read(new File("pacman-closedmouth.png"));
+            openMouthImage = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-openmouth.png"));
+            closedMouthImage = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-closedmouth.png"));
             pacmanNoMouthImage = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-nomouth.png"));
         } catch (IOException ex) {
             System.err.println("IOException reading PacMan Image");

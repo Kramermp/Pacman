@@ -10,8 +10,8 @@ import game.model.Game;
  * @version .1
  */
 public abstract class Entity {
-    public static enum MovementState {MOVING, STOPPED};
-    private MovementState state = MovementState.STOPPED;
+    public static enum MovementState {MOVING, STOPPED, SPAWNED};
+    private MovementState state = MovementState.SPAWNED;
     private static final Direction START_DIRECTION = Direction.DOWN;
     private Direction direction = Direction.DOWN;
     private double spawnX = 0.00;
