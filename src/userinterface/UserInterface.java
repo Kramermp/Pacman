@@ -2,7 +2,13 @@ package userinterface;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.Serializable;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
 /**
  * This Class acts the window that the Application will use.
@@ -14,6 +20,8 @@ import javax.swing.JFrame;
  * @version .1
  */
 public class UserInterface extends JFrame {
+    private Controller currentController;
+    
     
     /**
      * This is the default constructor for the UserInterface class
@@ -43,6 +51,10 @@ public class UserInterface extends JFrame {
         this.repaint();
     }
     
+    public void setCurrentController(Controller currentController) {
+        this.currentController = currentController;
+    }
+    
     /**
      * The LazyHolder class used to hold the UserInterface instance.
      */
@@ -57,6 +69,7 @@ public class UserInterface extends JFrame {
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
     }
     
     /**
@@ -65,4 +78,5 @@ public class UserInterface extends JFrame {
     private void clear() {
         this.getContentPane().removeAll();
     }
+    
 }
