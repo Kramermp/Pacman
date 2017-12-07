@@ -1,6 +1,7 @@
 package game.ui;
 
 import board.ui.BoardDisplay;
+import entity.ui.EnemyDisplay;
 import entity.ui.PacManDisplay;
 import game.controller.GameCntl;
 import game.model.Game;
@@ -27,7 +28,8 @@ public class GameUIFactory {
     public GameUI getGameUI(GameCntl gameCntl) {
         PacManDisplay pacmanDisplay = new PacManDisplay(sourceGame.getPacMan());
         BoardDisplay boardDisplay = new BoardDisplay(sourceGame.getBoard());
+        EnemyDisplay enemyDisplay = new EnemyDisplay(sourceGame.getEnemy1());
         
-        return new GameUI(gameCntl, pacmanDisplay, boardDisplay);
+        return new GameUI(gameCntl, pacmanDisplay, boardDisplay, enemyDisplay);
     }
 }
