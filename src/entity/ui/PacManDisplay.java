@@ -18,16 +18,19 @@ import javax.imageio.ImageIO;
  * @version .1
  */
 public class PacManDisplay implements Drawable {
+    private static final String PACMAN_IMAGE_PATH = "resources/images/pacman/";
     private GameUI parentDisplay;
     private PacMan source;
     private ImageObserver observer;
     private BufferedImage openMouthImage;
     private BufferedImage closedMouthImage;
+    private BufferedImage pacmanNoMouthImage;
     private BufferedImage currentImage;
     
     public PacManDisplay (PacMan pacman) {
         this.source = pacman;
         loadImage();
+        currentImage = pacmanNoMouthImage;
     }
 
     @Override
@@ -68,6 +71,7 @@ public class PacManDisplay implements Drawable {
         try {
             openMouthImage = ImageIO.read(new File("pacman-openmouth.png"));
             closedMouthImage = ImageIO.read(new File("pacman-closedmouth.png"));
+            pacmanNoMouthImage = ImageIO.read(new File(PACMAN_IMAGE_PATH + "pacman-nomouth.png"));
         } catch (IOException ex) {
             System.err.println("IOException reading PacMan Image");
         }
