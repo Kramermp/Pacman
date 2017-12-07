@@ -10,6 +10,8 @@ import game.model.Game;
  * @version .1
  */
 public abstract class Entity {
+    public static enum MovementState {MOVING, STOPPED};
+    private MovementState state = MovementState.STOPPED;
     private static final Direction START_DIRECTION = Direction.DOWN;
     private Direction direction = Direction.DOWN;
     private double spawnX = 0.00;
@@ -46,6 +48,7 @@ public abstract class Entity {
                 yPos = (int) yPos;
                 break;
         }
+        setState(MovementState.MOVING);
     }
     
     public void returnToSpawn() {
@@ -83,6 +86,13 @@ public abstract class Entity {
     
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+    
+    public void setState(MovementState state) {
+        this.state = state;
+    }
+    public MovementState getState() {
+        return this.state;
     }
     
     

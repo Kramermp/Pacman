@@ -1,6 +1,7 @@
 package entity.ui;
 
 import board.model.Board;
+import entity.model.Entity;
 import entity.model.PacMan;
 import game.ui.GameUI;
 import java.awt.Color;
@@ -22,6 +23,7 @@ public class PacManDisplay implements Drawable {
     private ImageObserver observer;
     private BufferedImage openMouthImage;
     private BufferedImage closedMouthImage;
+    private BufferedImage currentImage;
     
     public PacManDisplay (PacMan pacman) {
         this.source = pacman;
@@ -45,9 +47,14 @@ public class PacManDisplay implements Drawable {
     }
     
     public BufferedImage getCurrentImage() {
+        if(source.getState() == Entity.MovementState.STOPPED) {
+            return currentImage;
+        }
         if(System.currentTimeMillis() % 2 == 0) {
+            currentImage = openMouthImage;
             return openMouthImage;
         } else {
+            currentImage = openMouthImage;
             return closedMouthImage;
         }
     }

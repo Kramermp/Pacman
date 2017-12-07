@@ -3,6 +3,7 @@ package game.model;
 import board.model.Board;
 import entity.model.Direction;
 import entity.model.Enemy;
+import entity.model.Entity;
 import entity.model.PacMan;
 import game.controller.GameCntl;
 import java.awt.Point;
@@ -67,6 +68,7 @@ public class Game {
             // Skip Pacman Move
             // Do Nothing
             pacman.setDirection(Direction.NONE);
+            pacman.setState(Entity.MovementState.STOPPED);
         }
         
         for(int i = 0; i < enemies.length; i++) {

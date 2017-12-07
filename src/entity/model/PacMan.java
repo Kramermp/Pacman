@@ -8,7 +8,7 @@ import game.model.Game;
  * @version .1
  */
 public class PacMan extends Entity {
-
+    
     public PacMan(Game parentGame, double xPos, double yPos) {
         super(parentGame, xPos, yPos);
     }
