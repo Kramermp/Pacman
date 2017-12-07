@@ -78,6 +78,19 @@ public class Game {
                 calculateEnemyDirection(enemies[i]);
             }
         }
+        checkCollision();
+    }
+    
+    private void checkCollision() {
+        for(int i = 0; i < enemies.length; i++){
+            if(Math.abs(pacman.getXPos() - enemies[i].getXPos()) < .5) {
+                if(Math.abs(pacman.getYPos() - enemies[i].getYPos()) < .5) {
+                    System.out.println("Collision");
+                    pacman.returnToSpawn();
+                }
+            }
+            
+        }
     }
 
     private boolean validPacManMove() {

@@ -18,7 +18,7 @@ public class Enemy extends Entity {
     
     public Enemy(Game parentGame, double xPos, double yPos, int level) {
         super(parentGame, xPos, yPos);
-        super.setSpeed(.125 + .125 / level);
+        super.setSpeed(.125 + (.125 * level / 10));
         this.enemyNumber = currentEnemyNumber;
         currentEnemyNumber++;
     }
