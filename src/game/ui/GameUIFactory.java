@@ -1,6 +1,7 @@
 package game.ui;
 
 import board.ui.BoardDisplay;
+import entity.model.Enemy;
 import entity.ui.EnemyDisplay;
 import entity.ui.PacManDisplay;
 import game.controller.GameCntl;
@@ -29,9 +30,11 @@ public class GameUIFactory {
         PacManDisplay pacmanDisplay = new PacManDisplay(sourceGame.getPacMan());
         BoardDisplay boardDisplay = new BoardDisplay(sourceGame.getBoard());
         
-        EnemyDisplay[] enemyDisplays = { new EnemyDisplay(sourceGame.getEnemy1()),
-            new EnemyDisplay(sourceGame.getEnemy2()),
-            new EnemyDisplay(sourceGame.getEnemy3())};
+        Enemy[] enemies = sourceGame.getEnemies();
+        EnemyDisplay[] enemyDisplays = new EnemyDisplay[enemies.length];
+        for(int i = 0; i < enemies.length; i++) {
+            enemyDisplays[i] = new EnemyDisplay(enemies[i]);
+        }
 
         
         return new GameUI(gameCntl, pacmanDisplay, boardDisplay, enemyDisplays);

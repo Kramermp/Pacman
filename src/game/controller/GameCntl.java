@@ -15,6 +15,8 @@ import userinterface.UserInterface;
  * @version .1
  */
 public class GameCntl extends Controller {
+    private int totalScore;
+    private int level = 1;
     private Game game;
     
     
@@ -32,7 +34,16 @@ public class GameCntl extends Controller {
     }
     
     private void initializeGame() {
-        game = new Game();
+        game = new Game(this, level);
+    }
+    
+    public void boardCleared(int levelScore) {
+        System.out.println("Board Cleared");
+        totalScore+=levelScore;
+        game = new Game(this, level);
+        GameUI childUI = new GameUIFactory(game).getGameUI(this);
+        UserInterface.getInstance().setDisplay(childUI);
+        childUI.requestFocus();
     }
     
     @Override

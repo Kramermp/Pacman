@@ -4,6 +4,8 @@ import board.model.Board;
 import entity.model.Direction;
 import entity.model.Enemy;
 import entity.model.PacMan;
+import game.controller.GameCntl;
+import java.awt.Point;
 import java.util.Random;
 import javax.swing.Timer;
 
@@ -14,21 +16,26 @@ import javax.swing.Timer;
  * @version .1
  */
 public class Game {
+    private static final Point pacmanSpawn = new Point (9, 7);
+    private static final Point enemySpawn = new Point (9, 5);
+    private GameCntl parentCntl;
     private int score = 0;
     private PacMan pacman;
-    private Enemy enemy1;
-    private Enemy enemy2;
-    private Enemy enemy3;
+    private Enemy[] enemies;
     private Board board;
     private Timer timer = new Timer(40, (ActionEvent) -> { 
         updateEntities();
     });
     
-    public Game () {
-        this.pacman = new PacMan(this, 1, 1);
-        this.enemy1 = new Enemy(this, 1, 1);
-        this.enemy2 = new Enemy(this, 1, 2);
-        this.enemy3 = new Enemy(this, 1, 3);
+    
+    public Game (GameCntl parentCntl, int level) {
+        this.parentCntl = parentCntl;
+        this.pacman = new PacMan(this, pacmanSpawn.x, pacmanSpawn.y);
+        this.enemies = new Enemy[] {new Enemy(this, enemySpawn.x, enemySpawn.y, level),
+                new Enemy(this, enemySpawn.x, enemySpawn.y, level),
+                new Enemy(this, enemySpawn.x, enemySpawn.y, level),
+                new Enemy(this, enemySpawn.x, enemySpawn.y, level)
+        };
         
         //this.pacman.setSpeed(10);
         this.board = new Board();
@@ -53,23 +60,12 @@ public class Game {
             pacman.setDirection(Direction.NONE);
         }
         
-        if(validEnemyMove(enemy1)) {
-            enemy1.move();
-        } else {
-            calculateEnemyDirection(enemy1);
-        }
-        
-        if(validEnemyMove(enemy2)) {
-            enemy2.move();
-        } else {
-            calculateEnemyDirection(enemy2);
-        }
-        
-        if(validEnemyMove(enemy3)) {
-            enemy3.move();
-        } else {
-            System.out.println("Not Valid Move for enemy3");
-            calculateEnemyDirection(enemy3);
+        for(int i = 0; i < enemies.length; i++) {
+            if(validEnemyMove(enemies[i])) {
+            enemies[i].move();
+            } else {
+                calculateEnemyDirection(enemies[i]);
+            }
         }
     }
 
@@ -146,24 +142,28 @@ public class Game {
     
     private void pelletEaten() {
         score+=10;
+        board.pelletEaten();
+        if(board.boardIsCleared()) {
+            System.out.println("Board Cleared");
+        } else {
+            // Do Nothing
+        }
+    }
+    
+    private void checkBoardClear() {
+        
     }
     
     private void powerPelletEaten() {
         score+=20;
+        board.pelletEaten();
         //Do Stuff
     }
     
-    public Enemy getEnemy1() {
-        return enemy1;
+    public Enemy[] getEnemies() {
+        return enemies;
     }
     
-    public Enemy getEnemy2() {
-        return enemy2;
-    }
-    
-    public Enemy getEnemy3() {
-        return enemy3;
-    }
 
     private void calculateEnemyDirection(Enemy enemyToMove) {
         do {

@@ -24,18 +24,22 @@ import javax.imageio.ImageIO;
  */
 public class EnemyDisplay implements Drawable {   
     private int enemyNumber = 0;
-    private BufferedImage enemy1ImageUp;
-    private BufferedImage enemy1ImageDown;
-    private BufferedImage enemy1ImageLeft;
-    private BufferedImage enemy1ImageRight;
-    private BufferedImage enemy2ImageUp;
-    private BufferedImage enemy2ImageDown;
-    private BufferedImage enemy2ImageLeft;
-    private BufferedImage enemy2ImageRight;
-    private BufferedImage enemy3ImageUp;
-    private BufferedImage enemy3ImageDown;
-    private BufferedImage enemy3ImageLeft;
-    private BufferedImage enemy3ImageRight;
+    private static BufferedImage enemy1ImageUp;
+    private static BufferedImage enemy1ImageDown;
+    private static BufferedImage enemy1ImageLeft;
+    private static BufferedImage enemy1ImageRight;
+    private static BufferedImage enemy2ImageUp;
+    private static BufferedImage enemy2ImageDown;
+    private static BufferedImage enemy2ImageLeft;
+    private static BufferedImage enemy2ImageRight;
+    private static BufferedImage enemy3ImageUp;
+    private static BufferedImage enemy3ImageDown;
+    private static BufferedImage enemy3ImageLeft;
+    private static BufferedImage enemy3ImageRight;
+    private static BufferedImage enemy4ImageUp;
+    private static BufferedImage enemy4ImageDown;
+    private static BufferedImage enemy4ImageLeft;
+    private static BufferedImage enemy4ImageRight;
     
     private Enemy source;
     
@@ -81,12 +85,17 @@ public class EnemyDisplay implements Drawable {
             enemy3ImageDown = ImageIO.read(new File("enemy3Down.png"));
             enemy3ImageLeft = ImageIO.read(new File("enemy3Left.png"));
             enemy3ImageRight = ImageIO.read(new File("enemy3Right.png"));
+            enemy4ImageUp = ImageIO.read(new File("enemy4Up.png"));
+            enemy4ImageDown = ImageIO.read(new File("enemy4Down.png"));
+            enemy4ImageLeft = ImageIO.read(new File("enemy4Left.png"));
+            enemy4ImageRight = ImageIO.read(new File("enemy4Right.png"));
         } catch (IOException ex) {
             Logger.getLogger(EnemyDisplay.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private Image getCurrentImage() {
+        //Could probably be changed to change based off of direction or something
         switch(this.enemyNumber) {
             case 1:
                 return getEnemy1Image();
@@ -94,6 +103,8 @@ public class EnemyDisplay implements Drawable {
                 return getEnemy2Image();
             case 3:
                 return getEnemy3Image();
+            case 4:
+                return getEnemy4Image();
             default:
                 return getEnemy1Image();
         }
@@ -141,6 +152,21 @@ public class EnemyDisplay implements Drawable {
                 return enemy3ImageRight;
             default:
                 return enemy3ImageDown;
+        }
+    }
+    
+    private Image getEnemy4Image() {
+        switch(source.getDirection()) {
+            case UP:
+                return enemy4ImageUp;
+            case DOWN:
+                return enemy4ImageDown;
+            case LEFT:
+                return enemy4ImageLeft;
+            case RIGHT:
+                return enemy4ImageRight;
+            default:
+                return enemy4ImageDown;
         }
     }
 }
