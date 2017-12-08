@@ -90,6 +90,10 @@ public abstract class Entity {
     
     public void setState(MovementState state) {
         this.state = state;
+        if(state == MovementState.STOPPED) {
+            xPos = (int) xPos;
+            yPos = (int) yPos;
+        }
     }
     public MovementState getState() {
         return this.state;

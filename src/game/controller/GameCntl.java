@@ -5,6 +5,7 @@ import game.model.Game;
 import game.ui.GameUI;
 import game.ui.GameUIFactory;
 import java.awt.event.KeyEvent;
+import mainmenu.controller.MainMenuCntl;
 import userinterface.Controller;
 import userinterface.UserInterface;
 
@@ -36,8 +37,8 @@ public class GameCntl extends Controller {
         game = new Game(this, level);
     }
     
-    public void resetBoard() {
-        
+    public void gameOver(int score) {
+        new MainMenuCntl();
     }
     
     @Override

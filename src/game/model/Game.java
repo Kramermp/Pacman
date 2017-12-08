@@ -31,6 +31,8 @@ public class Game {
         updateEntities();
     });
     
+    private int playerLives = 3;
+    
     
     public Game (GameCntl parentCntl, int level) {
         this.parentCntl = parentCntl;
@@ -61,7 +63,7 @@ public class Game {
     }
     
     private void updateEntities() {
-        if (validPacManMove()) {
+        if (validMove(pacman)) {
             pacman.move();
             checkSpace();
         } else {
@@ -72,9 +74,10 @@ public class Game {
         }
         
         for(int i = 0; i < enemies.length; i++) {
-            if(validEnemyMove(enemies[i])) {
+            if(validMove(enemies[i])) {
             enemies[i].move();
             } else {
+                enemies[i].setState(Entity.MovementState.STOPPED);
                 calculateEnemyDirection(enemies[i]);
             }
         }
@@ -87,68 +90,49 @@ public class Game {
                 if(Math.abs(pacman.getYPos() - enemies[i].getYPos()) < .5) {
                     System.out.println("Collision");
                     pacman.returnToSpawn();
+                    playerLives--;
+                    if(playerLives == 0){
+                        gameOver();
+                    }
                 }
-            }
-            
+            }  
         }
-    }
-
-    private boolean validPacManMove() {
-        int[][] spaceArray = board.getSpaceArray();
-        switch(pacman.getDirection()) {
-            case UP:
-                //This needs to be handled different because (int) naturally floors
-                if (spaceArray[ (int)Math.ceil(pacman.getYPos() - 1)][(int)pacman.getXPos()] != 1) {
-                    return true;
-                }
-                break;
-            case DOWN:
-                if(spaceArray[(int)pacman.getYPos() + 1][(int)pacman.getXPos()] != 1
-                        && spaceArray[(int)pacman.getYPos() + 1][(int)pacman.getXPos()] != 2) {
-                    return true;
-                }
-                break;
-            case LEFT:
-                //This needs to be handled different because (int) naturally floors
-                if (spaceArray[(int)pacman.getYPos()][(int)Math.ceil(pacman.getXPos() - 1)] != 1) { 
-                    return true;
-                }
-                break;
-            case RIGHT:
-                if (spaceArray[(int)pacman.getYPos()][(int)pacman.getXPos() + 1] != 1) {
-                    return true;
-                }
-                break;
-        }
-        return false;
     }
     
-    private boolean validEnemyMove(Enemy enemyToMove) {
+    private void gameOver() {
+        parentCntl.gameOver(score);
+    }
+
+    private boolean validMove(Entity entityToMove) {
         int[][] spaceArray = board.getSpaceArray();
-        switch(enemyToMove.getDirection()) {
+        
+        switch(entityToMove.getDirection()) {
             case UP:
                 //This needs to be handled different because (int) naturally floors
-                if (spaceArray[ (int)Math.ceil(enemyToMove.getYPos() - 1)][(int)enemyToMove.getXPos()] != 1) {
+                if (spaceArray[ (int)Math.round(entityToMove.getYPos() - 1)][(int)entityToMove.getXPos()] != 1) {
                     return true;
                 }
                 break;
             case DOWN:
-                if(spaceArray[(int)enemyToMove.getYPos() + 1][(int)enemyToMove.getXPos()] != 1
-                        && spaceArray[(int)enemyToMove.getYPos() + 1][(int)enemyToMove.getXPos()] != 2) {
+                if(spaceArray[(int)entityToMove.getYPos() + 1][(int)entityToMove.getXPos()] != 1
+                        && spaceArray[(int)entityToMove.getYPos() + 1][(int)entityToMove.getXPos()] != 2) {
                     return true;
                 }
                 break;
             case LEFT:
                 //This needs to be handled different because (int) naturally floors
-                if (spaceArray[(int)enemyToMove.getYPos()][(int)Math.ceil(enemyToMove.getXPos() - 1)] != 1) { 
+                if (spaceArray[(int)entityToMove.getYPos()][(int)Math.ceil(entityToMove.getXPos() - 1)] != 1) { 
                     return true;
                 }
                 break;
             case RIGHT:
-                if (spaceArray[(int)enemyToMove.getYPos()][(int)enemyToMove.getXPos() + 1] != 1) {
+                if (spaceArray[(int)entityToMove.getYPos()][(int)entityToMove.getXPos() + 1] != 1) {
                     return true;
                 }
                 break;
+            case NONE:
+                //Do Nothing
+                return true;
         }
         return false;
     }
@@ -197,7 +181,7 @@ public class Game {
             } else {
                 enemyToMove.setDirection(Direction.RIGHT);
             }
-        } while (!validEnemyMove(enemyToMove));
+        } while (!validMove(enemyToMove));
     }
 
     private void levelCleared() {
