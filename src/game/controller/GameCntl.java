@@ -68,4 +68,8 @@ public class GameCntl extends Controller {
     public int getLevel() {
         return game.getLevel();
     }
+
+    public int getScore() {
+        return game.getScore();
+    }
 }

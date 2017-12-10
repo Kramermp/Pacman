@@ -9,6 +9,7 @@ import board.model.Board;
 import board.model.Space;
 import entity.model.Direction;
 import entity.model.Enemy;
+import entity.model.Entity;
 import entity.model.PacMan;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -54,7 +55,43 @@ public class AStarPathFinder extends PathFinder {
     }
     
     public Direction calculateDirection() {
-
+        if(enemy.getPursuitType() == Enemy.PursuitType.FLEE) {
+            return flee();
+            
+        } else {
+            return chasePacMan();
+        }
+    }
+    
+    private Direction flee() {
+        int currentX = (int)Math.round(enemy.getXPos());
+        int currentY = (int)Math.round(enemy.getYPos());
+        
+        int pacY = (int) Math.round(pacman.getYPos());
+        int pacX = (int) Math.round(pacman.getXPos());
+        
+        if (pacX >= currentX 
+                && board.getSpace(currentX - 1, currentY).isTraversable()) {
+            return Direction.LEFT;
+        } else if (pacX <= currentX 
+                && board.getSpace(currentX + 1, currentY).isTraversable()){
+            return Direction.RIGHT;
+        }
+        
+        if (pacY >= currentY 
+                && board.getSpace(currentX, currentY - 1).isTraversable()) {
+            return Direction.UP;
+        } else if ( pacY <= currentY
+                && board.getSpace(currentX, currentY + 1).isTraversable()){
+            return Direction.DOWN;
+        }
+        
+        System.out.println("Fail Safe " + enemy.getEnemyNumber());
+        return Direction.NONE;
+    }
+    
+    private Direction chasePacMan() {
+        
         if(Math.abs(pacman.getYPos() - enemy.getYPos()) <= 1
                 && Math.abs(pacman.getXPos() - enemy.getXPos()) <= 1) {
             System.out.println("Off By One");
@@ -85,6 +122,7 @@ public class AStarPathFinder extends PathFinder {
         
         endX = (int) pacman.getXPos();
         endY = (int) pacman.getYPos();
+        
         switch (pathFinderId % 2) {
             case 0:
                 if (pacman.getDirection() == Direction.LEFT) {
@@ -161,7 +199,7 @@ public class AStarPathFinder extends PathFinder {
         }
         
         return Direction.NONE;
-    } 
+    }
     
     private void pathFind() {
  

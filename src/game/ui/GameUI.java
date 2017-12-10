@@ -90,7 +90,14 @@ public class GameUI extends JPanel {
             String message = ("Level " + parentCntl.getLevel());
             //g.drawChars(message, 0, 0, 50, 50);
             g.drawString(message, (this.getWidth() / 2) -  (int) (fontSize * 1.6), this.getHeight() / 2);
-
+        } else {
+            float fontSize = this.getHeight() / 50; 
+            Font actualFont = levelFont.deriveFont(fontSize);
+            g.setFont(actualFont);
+            g.setColor(Color.WHITE);
+            String message = ("Score " + parentCntl.getScore());
+            //g.drawChars(message, 0, 0, 50, 50);
+            g.drawString(message, 15 ,  (int) (fontSize * 1.6));
         }
     }
     

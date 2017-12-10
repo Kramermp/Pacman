@@ -16,7 +16,9 @@ import javax.swing.Timer;
  * @author Michael Kramer
  * @version .1
  */
-public class Enemy extends Entity {
+public class Enemy extends Entity  {
+    public enum PursuitType {CHASE, FLEE}
+    private PursuitType pursuitType = PursuitType.CHASE;
     private PathFinder pathFinder;
     private static int currentEnemyNumber = 1;
     private int enemyNumber = 1;
@@ -24,6 +26,9 @@ public class Enemy extends Entity {
     private Timer timer = new Timer(200, (ActionEvent ae) -> { 
         this.setDirection(pathFinder.calculateDirection());
     });
+    
+    private long fleeStart = 0;
+    
     
     public Enemy(Game parentGame, double xPos, double yPos, int level) {
         super(parentGame, xPos, yPos);
@@ -54,6 +59,10 @@ public class Enemy extends Entity {
     // This is how enemies move
     @Override
     public void move() {
+        if(this.pursuitType == PursuitType.FLEE
+                && System.currentTimeMillis() - fleeStart > 15000) {
+            setPursuitType(pursuitType.CHASE);
+        }
         if(pathFinder.isValidDirection(super.getDirection())) {
             //System.out.println(super.getDirection()+ " is valid.");
             super.move();
@@ -67,14 +76,19 @@ public class Enemy extends Entity {
         
     }
     
-    public int getNumberOfValidMoves() {
-        return this.numberOfValidMoves;
-    }
-    
     public static void resetEnemyNumber() {
         Enemy.currentEnemyNumber = 1;
     }
     
+    public void setPursuitType(PursuitType type) {
+        if(type == PursuitType.FLEE) {
+            fleeStart = System.currentTimeMillis();
+        }
+        this.pursuitType = type;
+    }
     
+    public PursuitType getPursuitType() {
+        return this.pursuitType;
+    }
     
 }

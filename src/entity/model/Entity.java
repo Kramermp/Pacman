@@ -50,7 +50,7 @@ public abstract class Entity {
                     yPos-=speed;
                     xPos = Math.round(xPos);
                 } else {
-                    this.setState(MovementState.STOPPED);
+                    this.setMovementState(MovementState.STOPPED);
                 }
                 break;
             case DOWN:
@@ -58,7 +58,7 @@ public abstract class Entity {
                     yPos+=speed;
                     xPos = Math.round(xPos);
                 } else {
-                   this.setState(MovementState.STOPPED);
+                   this.setMovementState(MovementState.STOPPED);
                 }
                 break;
             case LEFT:
@@ -66,7 +66,7 @@ public abstract class Entity {
                     xPos-=speed;
                     yPos = Math.round(yPos);
                 } else {
-                    this.setState(MovementState.STOPPED);
+                    this.setMovementState(MovementState.STOPPED);
                 }
                 break;
             case RIGHT:
@@ -74,7 +74,7 @@ public abstract class Entity {
                     xPos+=speed;
                     yPos = Math.round(yPos);
                 } else {
-                    this.setState(MovementState.STOPPED);
+                    this.setMovementState(MovementState.STOPPED);
                 }
                 break;
             case NONE:
@@ -152,7 +152,7 @@ public abstract class Entity {
         this.direction = direction;
     }
     
-    public void setState(MovementState state) {
+    public void setMovementState(MovementState state) {
         this.state = state;
         if(state == MovementState.STOPPED) {
             xPos = (int) xPos;

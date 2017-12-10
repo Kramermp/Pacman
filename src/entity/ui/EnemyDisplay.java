@@ -7,6 +7,7 @@ package entity.ui;
 
 import board.model.Board;
 import entity.model.Enemy;
+import entity.model.Entity;
 import game.ui.GameUI;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -40,6 +41,8 @@ public class EnemyDisplay implements Drawable {
     private static BufferedImage enemy4ImageDown;
     private static BufferedImage enemy4ImageLeft;
     private static BufferedImage enemy4ImageRight;
+    
+    private static BufferedImage enemyFleeing2ImageRight;
     
     private Enemy source;
     private final Board board;
@@ -89,6 +92,8 @@ public class EnemyDisplay implements Drawable {
             enemy4ImageDown = ImageIO.read(new File("enemy4Down.png"));
             enemy4ImageLeft = ImageIO.read(new File("enemy4Left.png"));
             enemy4ImageRight = ImageIO.read(new File("enemy4Right.png"));
+            
+            enemyFleeing2ImageRight = ImageIO.read(new File("resources/images/enemy/fleeing/enemyfleeingright2.png"));
         } catch (IOException ex) {
             Logger.getLogger(EnemyDisplay.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -96,6 +101,9 @@ public class EnemyDisplay implements Drawable {
 
     private Image getCurrentImage() {
         //Could probably be changed to change based off of direction or something
+        if(source.getPursuitType() == Enemy.PursuitType.FLEE) {
+            return enemyFleeing2ImageRight;
+        }
         switch(this.enemyNumber) {
             case 1:
                 return getEnemy1Image();

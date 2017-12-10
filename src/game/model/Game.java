@@ -20,6 +20,8 @@ import javax.swing.Timer;
  * @version .1
  */
 public class Game {
+
+    
     public static enum GameState {PLAYING, WAITING, OVER};
     private GameState state = GameState.WAITING;
     private static Point pacmanSpawn = new Point (9, 7);
@@ -83,18 +85,24 @@ public class Game {
             enemies[i].move();
         }
         
-        //checkCollision();
+        checkCollision();
     }
     
     private void checkCollision() {
         for(int i = 0; i < enemies.length; i++){
             if(Math.abs(pacman.getXPos() - enemies[i].getXPos()) < .5) {
                 if(Math.abs(pacman.getYPos() - enemies[i].getYPos()) < .5) {
-                    System.out.println("Collision");
-                    pacman.returnToSpawn();
-                    playerLives--;
-                    if(playerLives == 0){
-                        gameOver();
+                    //System.out.println("Collision");
+                    if(enemies[i].getPursuitType() == Enemy.PursuitType.FLEE) { 
+                        enemies[i].returnToSpawn();
+                        enemies[i].setPursuitType(Enemy.PursuitType.CHASE);
+                        score+=200;
+                    } else {
+                        pacman.returnToSpawn();
+                        playerLives--;
+                        if(playerLives == 0){
+                            gameOver();
+                        }
                     }
                 }
             }  
@@ -133,7 +141,13 @@ public class Game {
     private void powerPelletEaten() {
         score+=20;
         board.pelletEaten();
-        //Do Stuff
+         if(board.isCleared()) {
+            levelCleared();
+        } else {
+            for(int i = 0; i < enemies.length; i++) {
+                enemies[i].setPursuitType(Enemy.PursuitType.FLEE);
+            }
+        }
     }
     
     public Enemy[] getEnemies() {
@@ -171,6 +185,10 @@ public class Game {
     
     public int getLevel() {
         return level;
+    }
+    
+    public int getScore() {
+        return score;
     }
         
 }
