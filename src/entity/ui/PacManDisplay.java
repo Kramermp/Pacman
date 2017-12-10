@@ -32,9 +32,11 @@ public class PacManDisplay implements Drawable {
     private BufferedImage closedMouthImageRight;
     private BufferedImage pacmanNoMouthImage;
     private BufferedImage currentImage;
+    private final Board board;
     
-    public PacManDisplay (PacMan pacman) {
+    public PacManDisplay (PacMan pacman, Board board) {
         this.source = pacman;
+        this.board = board;
         loadImage();
         currentImage = pacmanNoMouthImage;
     }
@@ -42,8 +44,9 @@ public class PacManDisplay implements Drawable {
     @Override
     public void drawEntity(Graphics g, GameUI parentDisplay) {
         //System.out.println("Drawing PacManEntity");
-        int spaceHeight = parentDisplay.getSize().height / Board.getHeight();
-        int spaceWidth = parentDisplay.getSize().width / Board.getWidth();
+        int spaceHeight = parentDisplay.getSize().height / board.getHeight();
+        int spaceWidth = parentDisplay.getSize().width / board.getWidth();
+        Entity.minX = 0 - spaceWidth;
         
         int pacmanHeight = spaceHeight - 10;
         int pacmanWidth = spaceWidth - 10;

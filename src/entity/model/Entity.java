@@ -1,5 +1,7 @@
 package entity.model;
 
+import board.model.Board;
+import board.model.Space;
 import game.model.Game;
 
 /**
@@ -10,19 +12,31 @@ import game.model.Game;
  * @version .1
  */
 public abstract class Entity {
+
+    protected Board board;
     public static enum MovementState {MOVING, STOPPED, SPAWNED};
     private MovementState state = MovementState.SPAWNED;
-    private static final Direction START_DIRECTION = Direction.DOWN;
+    private static final Direction START_DIRECTION = Direction.UP;
     private Direction direction = Direction.DOWN;
+    private Direction lastDirection = Direction.NONE;
     private double spawnX = 0.00;
     private double spawnY = 0.00;
-    private double xPos = 0;
-    private double yPos = 0;
-    private double speed = .25;
+    
+    public static double maxX;
+    public static double minX = -1;
+    public static double maxY;
+    public static double minY = -1;
+    
+    protected double xPos = 0;
+    protected double yPos = 0;
+    protected double speed = .25;
     private Game parentGame;
+    
+    public int moveOptions;
     
     public Entity(Game parentGame, double xPos, double yPos) {
         this.parentGame = parentGame;
+        this.board = parentGame.getBoard();
         this.xPos = xPos;
         this.yPos = yPos;
         this.spawnX = xPos;
@@ -32,23 +46,62 @@ public abstract class Entity {
     public void move() {
         switch (direction) {
             case UP:
-                yPos-=speed;
-                xPos = (int) xPos;
+                if (board.getSpace((int)xPos, (int) Math.floor(yPos - speed)).spaceType != Space.WALL) {
+                    yPos-=speed;
+                    xPos = Math.round(xPos);
+                } else {
+                    this.setState(MovementState.STOPPED);
+                }
                 break;
             case DOWN:
-                yPos+=speed;
-                xPos = (int) xPos;
+               if (board.getSpace((int)xPos, (int) Math.ceil(yPos + speed)).spaceType != Space.WALL) {
+                    yPos+=speed;
+                    xPos = Math.round(xPos);
+                } else {
+                   this.setState(MovementState.STOPPED);
+                }
                 break;
             case LEFT:
-                xPos-=speed;
-                yPos = (int) yPos;
+                if (board.getSpace((int) Math.floor(xPos - speed), (int) yPos).spaceType != Space.WALL) {
+                    xPos-=speed;
+                    yPos = Math.round(yPos);
+                } else {
+                    this.setState(MovementState.STOPPED);
+                }
                 break;
             case RIGHT:
-                xPos+=speed;
-                yPos = (int) yPos;
+                if (board.getSpace((int) Math.ceil(xPos + speed),(int) yPos ).spaceType != Space.WALL) {
+                    xPos+=speed;
+                    yPos = Math.round(yPos);
+                } else {
+                    this.setState(MovementState.STOPPED);
+                }
                 break;
+            case NONE:
         }
-        setState(MovementState.MOVING);
+        
+        if(yPos < 0 && xPos < 0) {
+            yPos = 0;
+            xPos = 0;
+        }
+        
+        if(yPos > maxY && xPos > maxX) {
+            yPos = 0;
+            xPos = 0;
+        }
+        
+        if(yPos < -1 ) {
+            yPos = maxY;
+        } else if (yPos >= maxY) {
+            yPos = -1;
+        }
+        
+        if(xPos <= -1) {
+            xPos = maxX;
+        } else if (xPos > maxX){
+            xPos = -1;
+        }
+
     }
     
     public void returnToSpawn() {
@@ -85,6 +138,17 @@ public abstract class Entity {
     }
     
     public void setDirection(Direction direction) {
+        switch(direction) {
+            case UP:
+            case DOWN:
+                xPos = (int) Math.round(xPos);
+                break;
+            case LEFT:
+            case RIGHT:
+                yPos = (int) Math.round(yPos);
+                break;
+        }
+        this.lastDirection = this.direction;
         this.direction = direction;
     }
     

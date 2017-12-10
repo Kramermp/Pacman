@@ -27,13 +27,13 @@ public class GameUIFactory {
      * @return the GameUI object
      */
     public GameUI getGameUI(GameCntl gameCntl) {
-        PacManDisplay pacmanDisplay = new PacManDisplay(sourceGame.getPacMan());
+        PacManDisplay pacmanDisplay = new PacManDisplay(sourceGame.getPacMan(), sourceGame.getBoard());
         BoardDisplay boardDisplay = new BoardDisplay(sourceGame.getBoard());
         
         Enemy[] enemies = sourceGame.getEnemies();
         EnemyDisplay[] enemyDisplays = new EnemyDisplay[enemies.length];
         for(int i = 0; i < enemies.length; i++) {
-            enemyDisplays[i] = new EnemyDisplay(enemies[i]);
+            enemyDisplays[i] = new EnemyDisplay(enemies[i], sourceGame.getBoard());
         }
 
         

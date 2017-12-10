@@ -5,7 +5,11 @@
  */
 package entity.model;
 
+import entity.controller.AStarPathFinder;
+import entity.controller.PathFinder;
 import game.model.Game;
+import java.awt.event.ActionEvent;
+import javax.swing.Timer;
 
 /**
  *
@@ -13,18 +17,64 @@ import game.model.Game;
  * @version .1
  */
 public class Enemy extends Entity {
+    private PathFinder pathFinder;
     private static int currentEnemyNumber = 1;
     private int enemyNumber = 1;
+    private int numberOfValidMoves = 0;
+    private Timer timer = new Timer(200, (ActionEvent ae) -> { 
+        this.setDirection(pathFinder.calculateDirection());
+    });
     
     public Enemy(Game parentGame, double xPos, double yPos, int level) {
         super(parentGame, xPos, yPos);
         super.setSpeed(.125);
         this.enemyNumber = currentEnemyNumber;
+        switch (enemyNumber) {
+            case 1:
+                this.pathFinder = new AStarPathFinder(parentGame.getBoard(), this, parentGame.getPacMan());
+                break;
+            case 2:
+                this.pathFinder = new AStarPathFinder(parentGame.getBoard(), this, parentGame.getPacMan());
+                break;
+            case 3:
+                // Fall Through
+            case 4:
+                // Fall Through
+            default:
+                this.pathFinder = new PathFinder(parentGame.getBoard(), this, parentGame.getPacMan());
+        }
         currentEnemyNumber++;
+        timer.start();
     }
     
     public int getEnemyNumber() {
         return this.enemyNumber;
     }
+    
+    // This is how enemies move
+    @Override
+    public void move() {
+        if(pathFinder.isValidDirection(super.getDirection())) {
+            //System.out.println(super.getDirection()+ " is valid.");
+            super.move();
+        } else {
+            this.setDirection(pathFinder.calculateDirection());
+            timer.restart();
+        }
+                
+        super.move();
+        //Calculate next direction
+        
+    }
+    
+    public int getNumberOfValidMoves() {
+        return this.numberOfValidMoves;
+    }
+    
+    public static void resetEnemyNumber() {
+        Enemy.currentEnemyNumber = 1;
+    }
+    
+    
     
 }

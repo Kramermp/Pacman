@@ -6,6 +6,7 @@
 package board.ui;
 
 import board.model.Board;
+import board.model.Space;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -34,7 +35,8 @@ public class BoardDisplay {
     }
     
     public void drawBoard(Graphics g, Dimension size) {
-        int[][] spaceArray = source.getSpaceArray();
+        
+        Space[][] spaceArray = source.getSpaceArray();
         
         int spaceHeight = size.height / source.getHeight();
         int spaceWidth = size.width / source.getWidth();
@@ -42,7 +44,7 @@ public class BoardDisplay {
         //g.drawImage(backgroundImage, 0, 0, size.width, size.height, null);
         for(int i = 0; i < source.getHeight(); i++) {
             for(int j = 0; j < source.getWidth(); j++) {
-                switch (spaceArray[i][j]) {
+                switch (spaceArray[i][j].spaceType) {
                     case 3: // Has Power Pellet
                         g.drawImage(powerupImage, j * spaceWidth, i * spaceHeight, spaceWidth, spaceHeight, null);
                         break;

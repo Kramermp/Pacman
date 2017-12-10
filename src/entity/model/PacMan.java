@@ -11,6 +11,15 @@ public class PacMan extends Entity {
     
     public PacMan(Game parentGame, double xPos, double yPos) {
         super(parentGame, xPos, yPos);
+        super.setSpeed(.5);
+    }
+    
+    @Override
+    public void move (){
+        super.board.getSpace((int) xPos, (int) yPos).hasPacMan = false;
+        super.move();
+        super.board.getSpace((int) xPos, (int) yPos).hasPacMan = true;
+        
     }
     
 }

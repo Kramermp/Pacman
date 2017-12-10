@@ -42,9 +42,11 @@ public class EnemyDisplay implements Drawable {
     private static BufferedImage enemy4ImageRight;
     
     private Enemy source;
+    private final Board board;
     
-    public EnemyDisplay(Enemy source) {
+    public EnemyDisplay(Enemy source, Board board) {
         this.source = source;
+        this.board = board;
         this.enemyNumber = this.source.getEnemyNumber();
         loadImages();
     }
@@ -52,8 +54,8 @@ public class EnemyDisplay implements Drawable {
     @Override
     public void drawEntity(Graphics g, GameUI parentDisplay) {
         //System.out.println("Drawing EnemeyEntity");
-        int spaceHeight = parentDisplay.getSize().height / Board.getHeight();
-        int spaceWidth = parentDisplay.getSize().width / Board.getWidth();
+        int spaceHeight = parentDisplay.getSize().height / board.getHeight();
+        int spaceWidth = parentDisplay.getSize().width / board.getWidth();
         
         int enemyHeight = spaceHeight - 10;
         int enemyWidth = spaceWidth - 10;

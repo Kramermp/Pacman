@@ -1,6 +1,9 @@
 package game.model;
 
 import board.model.Board;
+import board.model.BoardFactory;
+import board.model.Space;
+import entity.controller.PathFinder;
 import entity.model.Direction;
 import entity.model.Enemy;
 import entity.model.Entity;
@@ -19,8 +22,8 @@ import javax.swing.Timer;
 public class Game {
     public static enum GameState {PLAYING, WAITING, OVER};
     private GameState state = GameState.WAITING;
-    private static final Point pacmanSpawn = new Point (9, 7);
-    private static final Point enemySpawn = new Point (9, 5);
+    private static Point pacmanSpawn = new Point (9, 7);
+    private static Point enemySpawn = new Point (0, 0);
     private GameCntl parentCntl;
     private int score = 0;
     private int level = 0;
@@ -33,19 +36,27 @@ public class Game {
     
     private int playerLives = 3;
     
+    private PathFinder pathFinder;
+    
     
     public Game (GameCntl parentCntl, int level) {
         this.parentCntl = parentCntl;
+        this.board = new BoardFactory().getBoard();
+        Entity.maxX = board.getWidth();
+        Entity.maxY = board.getHeight();
+        
+        
+        pacmanSpawn = board.getPlayerSpawn();
+        enemySpawn = board.getEnemySpawn();
         this.level = level;
         this.pacman = new PacMan(this, pacmanSpawn.x, pacmanSpawn.y);
+        Enemy.resetEnemyNumber();
         this.enemies = new Enemy[] {new Enemy(this, enemySpawn.x, enemySpawn.y, level),
                 new Enemy(this, enemySpawn.x, enemySpawn.y, level),
                 new Enemy(this, enemySpawn.x, enemySpawn.y, level),
-                new Enemy(this, enemySpawn.x, enemySpawn.y, level)
+                new Enemy(this, enemySpawn.x, enemySpawn.y, level)               
         };
         
-        //this.pacman.setSpeed(10);
-        this.board = new Board();
         this.startLevel();
     }
     
@@ -66,22 +77,13 @@ public class Game {
         if (validMove(pacman)) {
             pacman.move();
             checkSpace();
-        } else {
-            // Skip Pacman Move
-            // Do Nothing
-            //pacman.setDirection(Direction.NONE);
-            pacman.setState(Entity.MovementState.STOPPED);
         }
         
         for(int i = 0; i < enemies.length; i++) {
-            if(validMove(enemies[i])) {
             enemies[i].move();
-            } else {
-                enemies[i].setState(Entity.MovementState.STOPPED);
-                calculateEnemyDirection(enemies[i]);
-            }
         }
-        checkCollision();
+        
+        //checkCollision();
     }
     
     private void checkCollision() {
@@ -104,46 +106,16 @@ public class Game {
     }
 
     private boolean validMove(Entity entityToMove) {
-        int[][] spaceArray = board.getSpaceArray();
-        
-        switch(entityToMove.getDirection()) {
-            case UP:
-                //This needs to be handled different because (int) naturally floors
-                if (spaceArray[ (int)Math.round(entityToMove.getYPos() - 1)][(int)entityToMove.getXPos()] != 1) {
-                    return true;
-                }
-                break;
-            case DOWN:
-                if(spaceArray[(int)entityToMove.getYPos() + 1][(int)entityToMove.getXPos()] != 1
-                        && spaceArray[(int)entityToMove.getYPos() + 1][(int)entityToMove.getXPos()] != 2) {
-                    return true;
-                }
-                break;
-            case LEFT:
-                //This needs to be handled different because (int) naturally floors
-                if (spaceArray[(int)entityToMove.getYPos()][(int)Math.ceil(entityToMove.getXPos() - 1)] != 1) { 
-                    return true;
-                }
-                break;
-            case RIGHT:
-                if (spaceArray[(int)entityToMove.getYPos()][(int)entityToMove.getXPos() + 1] != 1) {
-                    return true;
-                }
-                break;
-            case NONE:
-                //Do Nothing
-                return true;
-        }
-        return false;
+        return true;
     }
     
     private void checkSpace() {
-        int[][] spaceArray = board.getSpaceArray();
-        if(spaceArray[(int)pacman.getYPos()][(int)pacman.getXPos()] == 0) {
-            spaceArray[(int)pacman.getYPos()][(int)pacman.getXPos()] = 4;
+        Space pacmanSpace = board.getSpace((int)pacman.getXPos(), (int)pacman.getYPos());
+        if( pacmanSpace.spaceType == 0) {
+            pacmanSpace.spaceType = 4;
             pelletEaten();
-        } else if (spaceArray[(int)pacman.getYPos()][(int)pacman.getXPos()] == 3) {
-            spaceArray[(int)pacman.getYPos()][(int)pacman.getXPos()] = 4;
+        } else if (pacmanSpace.spaceType == 3) {
+            pacmanSpace.spaceType = 4;
             powerPelletEaten();
         }
     }
@@ -151,7 +123,7 @@ public class Game {
     private void pelletEaten() {
         score+=10;
         board.pelletEaten();
-        if(board.boardIsCleared()) {
+        if(board.isCleared()) {
             levelCleared();
         } else {
             // Do Nothing
@@ -166,22 +138,6 @@ public class Game {
     
     public Enemy[] getEnemies() {
         return enemies;
-    }
-    
-
-    private void calculateEnemyDirection(Enemy enemyToMove) {
-        do {
-            int number = new Random().nextInt(4);
-            if(number == 0) {
-                enemyToMove.setDirection(Direction.UP);
-            } else if (number == 1) {
-                enemyToMove.setDirection(Direction.DOWN);
-            } else if (number == 2) {
-                enemyToMove.setDirection(Direction.LEFT);
-            } else {
-                enemyToMove.setDirection(Direction.RIGHT);
-            }
-        } while (!validMove(enemyToMove));
     }
 
     private void levelCleared() {
