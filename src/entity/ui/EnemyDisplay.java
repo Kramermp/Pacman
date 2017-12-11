@@ -18,12 +18,13 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import mainmenu.ui.MainMenuUI;
 
 /**
  *
  * @author Michael Kramer
  */
-public class EnemyDisplay implements Drawable {   
+public class EnemyDisplay extends Display implements Drawable {   
     private int enemyNumber = 0;
     private static BufferedImage enemy1ImageUp;
     private static BufferedImage enemy1ImageDown;
@@ -47,11 +48,35 @@ public class EnemyDisplay implements Drawable {
     private Enemy source;
     private final Board board;
     
+    private MainMenuUI mainmenuUI;
+    
+    public EnemyDisplay(Enemy source, MainMenuUI mainmenuUI) {
+        this.source = source;
+        this.mainmenuUI = mainmenuUI;
+        this. board = null;
+        this.enemyNumber = this.source.getEnemyNumber();
+        loadImages();
+    }
+    
     public EnemyDisplay(Enemy source, Board board) {
         this.source = source;
         this.board = board;
         this.enemyNumber = this.source.getEnemyNumber();
         loadImages();
+    }
+    
+        public void drawEntity(Graphics g) {
+        //System.out.println("Drawing PacManEntity");
+        
+        int pacmanHeight = mainmenuUI.getSize().height / 10;
+        int pacmanWidth = mainmenuUI.getSize().height / 10;
+        Entity.maxX = mainmenuUI.getWidth();
+        
+        
+        int realXPos =(int)(source.getXPos());
+        int realYPos = (int) mainmenuUI.getSize().height / 2;
+        
+        g.drawImage(getCurrentImage(), realXPos, realYPos, pacmanWidth, pacmanHeight, null);
     }
 
     @Override

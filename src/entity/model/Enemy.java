@@ -29,21 +29,28 @@ public class Enemy extends Entity  {
     
     private long fleeStart = 0;
     
+    public Enemy() {
+        super();
+        super.setSpeed(10);
+        super.setDirection(Direction.RIGHT);
+        this.enemyNumber = currentEnemyNumber;
+        currentEnemyNumber++;
+    }
     
     public Enemy(Game parentGame, double xPos, double yPos, int level) {
         super(parentGame, xPos, yPos);
         super.setSpeed(.125);
         this.enemyNumber = currentEnemyNumber;
-        switch (enemyNumber) {
+        switch (enemyNumber % 4) {
+            case 0:
+                this.pathFinder = new AStarPathFinder(parentGame.getBoard(), this, parentGame.getPacMan());
+                break;
             case 1:
                 this.pathFinder = new AStarPathFinder(parentGame.getBoard(), this, parentGame.getPacMan());
                 break;
             case 2:
-                this.pathFinder = new AStarPathFinder(parentGame.getBoard(), this, parentGame.getPacMan());
-                break;
-            case 3:
                 // Fall Through
-            case 4:
+            case 3:
                 // Fall Through
             default:
                 this.pathFinder = new PathFinder(parentGame.getBoard(), this, parentGame.getPacMan());
@@ -60,15 +67,19 @@ public class Enemy extends Entity  {
     @Override
     public void move() {
         if(this.pursuitType == PursuitType.FLEE
-                && System.currentTimeMillis() - fleeStart > 15000) {
+                && System.currentTimeMillis() - fleeStart > 5000) {
             setPursuitType(pursuitType.CHASE);
         }
-        if(pathFinder.isValidDirection(super.getDirection())) {
+        if(pathFinder != null) {
+            if(pathFinder.isValidDirection(super.getDirection())) {
             //System.out.println(super.getDirection()+ " is valid.");
             super.move();
+            } else {
+                this.setDirection(pathFinder.calculateDirection());
+                timer.restart();
+            }
         } else {
-            this.setDirection(pathFinder.calculateDirection());
-            timer.restart();
+            
         }
                 
         super.move();

@@ -44,8 +44,10 @@ public class Game {
     public Game (GameCntl parentCntl, int level) {
         this.parentCntl = parentCntl;
         this.board = new BoardFactory().getBoard();
-        Entity.maxX = board.getWidth();
+        Entity.maxX = board.getWidth() + 1;
+        Entity.minX = -1;
         Entity.maxY = board.getHeight();
+        Entity.minY = -1;
         
         
         pacmanSpawn = board.getPlayerSpawn();

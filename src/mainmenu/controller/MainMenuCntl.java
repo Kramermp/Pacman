@@ -1,6 +1,11 @@
 package mainmenu.controller;
 
+import entity.model.Enemy;
+import entity.model.Entity;
+import entity.model.PacMan;
 import game.controller.GameCntl;
+import java.awt.event.ActionEvent;
+import javax.swing.Timer;
 import mainmenu.ui.MainMenuUI;
 import userinterface.UserInterface;
 
@@ -12,15 +17,29 @@ import userinterface.UserInterface;
  */
 public class MainMenuCntl {
     private UserInterface userInterface;
+    private PacMan pacman;
+    private Enemy[] enemies;
+    
+    private Timer enityTimer = new Timer(33, (ActionEvent ae) -> { 
+        pacman.move();
+        for(int i = 0; i < enemies.length; i++) {
+            enemies[i].move();
+        }
+    });
     
     /**
      * Creates a MainMenuCntl, UserInterface, and puts a MainMenuUI inside
      */
     public MainMenuCntl() {
-        MainMenuUI childUI = new MainMenuUI(this);
+        pacman = new PacMan();
+        
+        enemies = new Enemy[] {new Enemy(), new Enemy(), new Enemy(), new Enemy()};
+        MainMenuUI childUI = new MainMenuUI(this, pacman, enemies);
         userInterface = UserInterface.getInstance();
         userInterface.setDisplay(childUI);
         userInterface.setVisible(true);
+        childUI.start();
+        enityTimer.start();
     }
     
     /**

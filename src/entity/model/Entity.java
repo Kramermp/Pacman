@@ -29,10 +29,14 @@ public abstract class Entity {
     
     protected double xPos = 0;
     protected double yPos = 0;
-    protected double speed = .25;
+    protected double speed = 55;
     private Game parentGame;
     
     public int moveOptions;
+    
+    public Entity() {
+        
+    }
     
     public Entity(Game parentGame, double xPos, double yPos) {
         this.parentGame = parentGame;
@@ -44,43 +48,15 @@ public abstract class Entity {
     }
     
     public void move() {
-        switch (direction) {
-            case UP:
-                if (board.getSpace((int)xPos, (int) Math.floor(yPos - speed)).spaceType != Space.WALL) {
-                    yPos-=speed;
-                    xPos = Math.round(xPos);
-                } else {
-                    this.setMovementState(MovementState.STOPPED);
-                }
-                break;
-            case DOWN:
-               if (board.getSpace((int)xPos, (int) Math.ceil(yPos + speed)).spaceType != Space.WALL) {
-                    yPos+=speed;
-                    xPos = Math.round(xPos);
-                } else {
-                   this.setMovementState(MovementState.STOPPED);
-                }
-                break;
-            case LEFT:
-                if (board.getSpace((int) Math.floor(xPos - speed), (int) yPos).spaceType != Space.WALL) {
-                    xPos-=speed;
-                    yPos = Math.round(yPos);
-                } else {
-                    this.setMovementState(MovementState.STOPPED);
-                }
-                break;
-            case RIGHT:
-                if (board.getSpace((int) Math.ceil(xPos + speed),(int) yPos ).spaceType != Space.WALL) {
-                    xPos+=speed;
-                    yPos = Math.round(yPos);
-                } else {
-                    this.setMovementState(MovementState.STOPPED);
-                }
-                break;
-            case NONE:
+        if(board != null) {
+            moveAcrossBoard();
+        } else {
+            //System.out.println(speed);
+            //System.out.println("Moving without board");
+            moveWithoutBoard();
         }
         
-        if(yPos < 0 && xPos < 0) {
+        if(yPos < minY && xPos < minY) {
             yPos = 0;
             xPos = 0;
         }
@@ -90,16 +66,24 @@ public abstract class Entity {
             xPos = 0;
         }
         
-        if(yPos < -1 ) {
+        if(yPos < minY ) {
             yPos = maxY;
         } else if (yPos >= maxY) {
-            yPos = -1;
+            yPos = minY;
+        } else {
+            System.out.println("Y:" + yPos);
+            System.out.println("maxY:" + maxY);
+            System.out.println("minY:" + minY);
         }
         
-        if(xPos <= -1) {
+        if(xPos < minX) {
             xPos = maxX;
         } else if (xPos > maxX){
-            xPos = -1;
+            xPos = minX;
+        } else {
+            System.out.println("X:" + xPos);
+            System.out.println("maxX: " + maxX);
+            System.out.println("MinX: " + minX);
         }
 
     }
@@ -164,4 +148,64 @@ public abstract class Entity {
     }
     
     
+    private void moveAcrossBoard() {
+        switch (direction) {
+            case UP:
+                if (board.getSpace((int)xPos, (int) Math.floor(yPos - speed)).spaceType != Space.WALL) {
+                    yPos-=speed;
+                    xPos = Math.round(xPos);
+                } else {
+                    this.setMovementState(MovementState.STOPPED);
+                }
+                break;
+            case DOWN:
+               if (board.getSpace((int)xPos, (int) Math.ceil(yPos + speed)).spaceType != Space.WALL) {
+                    yPos+=speed;
+                    xPos = Math.round(xPos);
+                } else {
+                   this.setMovementState(MovementState.STOPPED);
+                }
+                break;
+            case LEFT:
+                if (board.getSpace((int) Math.floor(xPos - speed), (int) yPos).spaceType != Space.WALL) {
+                    xPos-=speed;
+                    yPos = Math.round(yPos);
+                } else {
+                    this.setMovementState(MovementState.STOPPED);
+                }
+                break;
+            case RIGHT:
+                if (board.getSpace((int) Math.ceil(xPos + speed),(int) yPos ).spaceType != Space.WALL) {
+                    xPos+=speed;
+                    yPos = Math.round(yPos);
+                } else {
+                    this.setMovementState(MovementState.STOPPED);
+                }
+                break;
+            case NONE:
+        }
+    }
+        
+    private void moveWithoutBoard() {
+        switch (direction) {
+            case UP:
+                    yPos-=speed;
+                    xPos = Math.round(xPos);
+                break;
+            case DOWN:
+                    yPos+=speed;
+                    xPos = Math.round(xPos);
+                break;
+            case LEFT:
+                    xPos-=speed;
+                    yPos = Math.round(yPos);
+                break;
+            case RIGHT:
+                    xPos+=speed;
+                    yPos = Math.round(yPos);
+                break;
+            case NONE:
+        }
+    }
+            
 }
