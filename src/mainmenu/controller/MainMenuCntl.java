@@ -33,6 +33,7 @@ public class MainMenuCntl {
     public MainMenuCntl() {
         pacman = new PacMan();
         
+        Enemy.resetEnemyNumber();
         enemies = new Enemy[] {new Enemy(), new Enemy(), new Enemy(), new Enemy()};
         MainMenuUI childUI = new MainMenuUI(this, pacman, enemies);
         userInterface = UserInterface.getInstance();

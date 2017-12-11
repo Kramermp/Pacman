@@ -28,7 +28,7 @@ public class Space {
     }
     
     public boolean isTraversable() {
-        return spaceType != WALL && !hasPacMan;
+        return spaceType != WALL;
     }
 
 }

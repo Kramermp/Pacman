@@ -55,12 +55,18 @@ public class AStarPathFinder extends PathFinder {
     }
     
     public Direction calculateDirection() {
+        Direction directionToMove = Direction.NONE;
         if(enemy.getPursuitType() == Enemy.PursuitType.FLEE) {
-            return flee();
-            
+            directionToMove = flee();
         } else {
-            return chasePacMan();
+            directionToMove =  chasePacMan();
         }
+        
+        if(directionToMove == Direction.NONE) {
+            directionToMove = super.calculateDirection();
+        }
+        
+        return directionToMove;
     }
     
     private Direction flee() {
@@ -95,9 +101,9 @@ public class AStarPathFinder extends PathFinder {
         if(Math.abs(pacman.getYPos() - enemy.getYPos()) <= 1
                 && Math.abs(pacman.getXPos() - enemy.getXPos()) <= 1) {
             System.out.println("Off By One");
-            if(pacman.getYPos() < enemy.getYPos()) {
+            if(pacman.getYPos() < enemy.getYPos() && pacman.getXPos() == enemy.getXPos()) {
                 return Direction.UP;
-            } else if (pacman.getYPos() > enemy.getYPos()) {
+            } else if (pacman.getYPos() > enemy.getYPos() && pacman.getXPos() == enemy.getXPos()) {
                 return Direction.DOWN;
             } else {
                 // pacman.getYPos() == enemy.getYPos()
@@ -242,7 +248,7 @@ public class AStarPathFinder extends PathFinder {
                     upCell.distanceToStart = currentCell.distanceToStart + TRAVEL_COST;
                     upCell.parent = currentCell;
                 }
-                if(!availableCells.contains((Cell) upCell)) {
+                if(!availableCells.contains((Cell) upCell) && upCell.isCrossable()) {
                     availableCells.add(upCell);
                 }
             } else {
@@ -258,7 +264,7 @@ public class AStarPathFinder extends PathFinder {
                     downCell.distanceToStart = currentCell.distanceToStart + TRAVEL_COST;
                     downCell.parent = currentCell;
                 }
-                if (!availableCells.contains((Cell) downCell) && downCell.spaceType != 1) {
+                if (!availableCells.contains((Cell) downCell) && downCell.isCrossable()) {
                     availableCells.add(downCell);
                 }
                 
@@ -274,7 +280,7 @@ public class AStarPathFinder extends PathFinder {
                     leftCell.distanceToStart = currentCell.distanceToStart + TRAVEL_COST;
                     leftCell.parent = currentCell;
                 }
-                if (!availableCells.contains((Cell) leftCell) && leftCell.spaceType != 1) {
+                if (!availableCells.contains((Cell) leftCell) && leftCell.isCrossable()) {
                 availableCells.add(leftCell);
                 }
                 
@@ -290,7 +296,7 @@ public class AStarPathFinder extends PathFinder {
                     rightCell.distanceToStart = currentCell.distanceToStart + TRAVEL_COST;
                     rightCell.parent = currentCell;
                 }
-                if (!availableCells.contains((Cell) rightCell)) {
+                if (!availableCells.contains((Cell) rightCell) && rightCell.isCrossable()) {
                 availableCells.add(rightCell);
                 }
                 
@@ -312,6 +318,7 @@ public class AStarPathFinder extends PathFinder {
         int x;
         int y;
         int spaceType = 0;
+        boolean hasPacMan = false;
         
         public Cell(int x, int y) {
             this.parent = null;
@@ -327,6 +334,11 @@ public class AStarPathFinder extends PathFinder {
             this.x = x;
             this.y = y;
             this.spaceType = board.getSpace(x, y).spaceType;
+            this.hasPacMan = board.getSpace(x, y).hasPacMan;
+        }
+        
+        private boolean isCrossable() {
+            return spaceType != 1 && !hasPacMan;
         }
 
         @Override

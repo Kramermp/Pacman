@@ -17,7 +17,7 @@ public class PacMan extends Entity {
     
     public PacMan(Game parentGame, double xPos, double yPos) {
         super(parentGame, xPos, yPos);
-        super.setSpeed(.25);
+        super.setSpeed(.2);
     }
     
     @Override

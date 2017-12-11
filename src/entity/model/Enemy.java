@@ -41,16 +41,16 @@ public class Enemy extends Entity  {
         super(parentGame, xPos, yPos);
         super.setSpeed(.125);
         this.enemyNumber = currentEnemyNumber;
-        switch (enemyNumber % 4) {
-            case 0:
-                this.pathFinder = new AStarPathFinder(parentGame.getBoard(), this, parentGame.getPacMan());
-                break;
+        switch (enemyNumber) {
             case 1:
                 this.pathFinder = new AStarPathFinder(parentGame.getBoard(), this, parentGame.getPacMan());
                 break;
             case 2:
-                // Fall Through
+                this.pathFinder = new AStarPathFinder(parentGame.getBoard(), this, parentGame.getPacMan());
+                break;
             case 3:
+                // Fall Through
+            case 4:
                 // Fall Through
             default:
                 this.pathFinder = new PathFinder(parentGame.getBoard(), this, parentGame.getPacMan());

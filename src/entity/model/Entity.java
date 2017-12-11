@@ -71,9 +71,9 @@ public abstract class Entity {
         } else if (yPos >= maxY) {
             yPos = minY;
         } else {
-            System.out.println("Y:" + yPos);
-            System.out.println("maxY:" + maxY);
-            System.out.println("minY:" + minY);
+//            System.out.println("Y:" + yPos);
+//            System.out.println("maxY:" + maxY);
+//            System.out.println("minY:" + minY);
         }
         
         if(xPos < minX) {
@@ -81,9 +81,9 @@ public abstract class Entity {
         } else if (xPos > maxX){
             xPos = minX;
         } else {
-            System.out.println("X:" + xPos);
-            System.out.println("maxX: " + maxX);
-            System.out.println("MinX: " + minX);
+//            System.out.println("X:" + xPos);
+//            System.out.println("maxX: " + maxX);
+//            System.out.println("MinX: " + minX);
         }
 
     }
@@ -122,16 +122,25 @@ public abstract class Entity {
     }
     
     public void setDirection(Direction direction) {
-        switch(direction) {
-            case UP:
-            case DOWN:
-                xPos = (int) Math.round(xPos);
-                break;
-            case LEFT:
-            case RIGHT:
-                yPos = (int) Math.round(yPos);
-                break;
-        }
+        xPos = (int) Math.round((xPos));
+        yPos = (int) Math.round(yPos);
+//        switch(direction) {
+//            case UP:
+//
+//                break;
+//            case DOWN:
+//                xPos = (int) Math.ceil(xPos);
+//                yPos = (int) Math.ceil(yPos);
+//                break;
+//            case LEFT:
+//                yPos = (int) Math.ceil(yPos);
+//                xPos = (int) Math.floor(xPos);
+//                break;
+//            case RIGHT:
+//                yPos = (int) Math.floor(yPos);
+//                xPos = (int) (xPos);
+//                break;
+//        }
         this.lastDirection = this.direction;
         this.direction = direction;
     }
@@ -139,8 +148,8 @@ public abstract class Entity {
     public void setMovementState(MovementState state) {
         this.state = state;
         if(state == MovementState.STOPPED) {
-            xPos = (int) xPos;
-            yPos = (int) yPos;
+            xPos = (int) Math.round(xPos);
+            yPos = (int) Math.round(yPos);
         }
     }
     public MovementState getState() {
